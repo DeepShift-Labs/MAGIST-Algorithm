@@ -61,4 +61,4 @@ npzfile = np.load("data.npz")
 audio = npzfile['audio']
 video = npzfile['video']
 # print(npzfile.files)
-print(video[0][0].shape)
+print(video[0][0])
