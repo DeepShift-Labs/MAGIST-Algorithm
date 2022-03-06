@@ -5,6 +5,7 @@
 *.jpg
 *.png
 *.jpeg
+*.npz
 
 
 # Byte-compiled / optimized / DLL files
