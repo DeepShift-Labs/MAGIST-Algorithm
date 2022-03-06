@@ -6,13 +6,16 @@ from PIL import Image
 import os
 from tqdm import tqdm
 
+from tempfile import TemporaryFile
+
+
 # mic_frequency = 44100 #Hz
 # fps = 30
 # audio1 = []
 # video1 = []
 
 
-def group_audio_video_sync(image_in_dir, audio_in, fps):
+def group_audio_video_sync(image_in_dir, img_rescale, audio_in, fps):
   audio1 = []
   video1 = []
 
@@ -23,6 +26,7 @@ def group_audio_video_sync(image_in_dir, audio_in, fps):
 
   for f in tqdm(file1):
     img = Image.open(f"{image_in_dir}/{f}")
+    img.thumbnail(img_rescale, Image.ANTIALIAS)
     np_img = np.array(img)
     video1.append(np_img)
 
@@ -35,6 +39,11 @@ def group_audio_video_sync(image_in_dir, audio_in, fps):
     audio1.append(chunk)
   print(index)
 
+  video1 = np.array(video1)
+  audio1 = np.array(audio1)
+
+  np.savez("data.npz", audio=audio1, video=video1)
+
   return audio1, video1
 
 def data_to_wave(data):
@@ -44,7 +53,12 @@ def data_to_wave(data):
     for a in i:
       signal.append(a)
 
-audio, video = group_audio_video_sync("Frames/1", "Raw_Data/Audio/1.wav", 30)
+# audio, video = group_audio_video_sync("Frames/1", (500, 500), "Raw_Data/Audio/1.wav", 30)
 
 # print(len(audio[0])*len(video))
-print(video)
+
+npzfile = np.load("data.npz")
+audio = npzfile['audio']
+video = npzfile['video']
+# print(npzfile.files)
+print(video[0][0].shape)
