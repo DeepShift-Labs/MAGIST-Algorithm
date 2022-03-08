@@ -1,25 +1,31 @@
-import numpy as np
-from scipy import signal
-from scipy import misc
-face = misc.face(gray=True) - misc.face(gray=True).mean()
-print(face)
-template = np.copy(face[300:365, 670:750])  # right eye
-template -= template.mean()
-face = face + np.random.randn(*face.shape) * 50  # add noise
-corr = signal.correlate2d(face, template, boundary='symm', mode='same')
-y, x = np.unravel_index(np.argmax(corr), corr.shape)  # find the match
+import os, sys, re
+import selenium, base64, time
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
-import matplotlib.pyplot as plt
-fig, (ax_orig, ax_template, ax_corr) = plt.subplots(3, 1,
-                                                    figsize=(6, 15))
-ax_orig.imshow(face, cmap='gray')
-ax_orig.set_title('Original')
-ax_orig.set_axis_off()
-ax_template.imshow(template, cmap='gray')
-ax_template.set_title('Template')
-ax_template.set_axis_off()
-ax_corr.imshow(corr, cmap='gray')
-ax_corr.set_title('Cross-correlation')
-ax_corr.set_axis_off()
-ax_orig.plot(x, y, 'ro')
-fig.show()
+def google_reverse_search(target, image):
+    google_images_url = "https://www.google.no/imghp?sbi=1"
+
+    nav = webdriver.Firefox() # u can use webdriver.PhantomJS for headless and faster execution
+    nav.get(google_images_url)
+    nav.find_element_by_id("qbui").click()
+    #~ nav.execute_script('alert()')
+    nav.execute_script('document.getElementById("qbui").value = "' + image + '"') # best way i've found, faster
+    #~ nav.find_element_by_id("qbui").send_keys(image) # don't know why so slow, maybe its made inside a loop :V didn't look for
+    #~ os.system('xdotool key "' + image + '"') # this wont work because you need to convert simbols to xdotool accepted keys :/
+    nav.find_element_by_id("qbf").submit()
+    if WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, target))):
+        print (target, "found in this image")
+        time.sleep(2)
+        return True
+    else:
+        print ("no encuentro " + target)
+        time.sleep(2)
+        return False
+
+if __name__ == "__main__" :
+    target = "idk"
+    image = "data:image/png;base64," + "Initial_img/a/test.jpg"
+    google_reverse_search(target, image)
