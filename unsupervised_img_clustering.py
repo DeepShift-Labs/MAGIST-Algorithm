@@ -6,6 +6,9 @@ from skimage.transform import resize
 from sklearn.cluster import KMeans
 from skimage.util import img_as_uint
 import search
+import os
+import fiftyone as fo
+import fiftyone.zoo as foz
 
 def image_to_pandas(image):
     df = pd.DataFrame([image[:,:,0].flatten(),
@@ -47,5 +50,19 @@ def unsupervised_clusters(n_of_clusters, img_location, img_size, masked_img_dir)
     fig.tight_layout()
     plt.show()
 
-unsupervised_clusters(3, 'test.jpg', (540, 480), ".")
-search.reverse_image_search('masked1.jpg')
+dataset = foz.load_zoo_dataset(
+    "open-images-v6",
+    split="validation",
+    label_types=["segmentations", "classifications"],
+    classes = ["door"],
+    max_samples=100,
+    seed=51,
+    shuffle=True,
+    dataset_name="open-images-food",
+)
+
+# unsupervised_clusters(10, 'test.jpg', (540, 480), "./Masks")
+# unsupervised_clusters(2, 'masked2.jpg', (540, 480), ".")
+# key = search.reverse_image_search('masked2.jpg')
+# os.system(f'mkdir Pics/{key}')
+# search.download_dataset(key, 15, f'Pics/{key}')
