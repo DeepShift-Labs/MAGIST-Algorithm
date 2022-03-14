@@ -28,4 +28,4 @@ This project is still under development. Please contact me at [deepshiftlabs@out
 
 
 ## Contributing
-Your contribution, monetary or programaticaly, is crucial for the rapid development of the algorithm and its training. Please consider contributing. Even the smallest change to my README will be greatly appreciated.
+Your contribution, monetary or programmatically, is crucial for the rapid development of the algorithm and its training. Please consider contributing. Even the smallest change to my README will be greatly appreciated.
