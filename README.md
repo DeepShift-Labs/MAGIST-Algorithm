@@ -3,7 +3,7 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 
 ## Working Principal
 Here is a flow diagram with the entire system drawn:
-![image](https://user-images.githubusercontent.com/85193239/158191842-c66549ca-b432-4051-86f5-1501fef8804d.png)
+<img src="blob:chrome-untrusted://media-app/82606eb9-7b46-437d-a082-f19578dc252f" alt=""/>![image](https://user-images.githubusercontent.com/85193239/158194561-7636e461-d3d2-484a-bf36-81db60488c22.png)
 
 ### Data
 The data is the most important element as the entire intelligence works around it. That is why it is important for the AI to process it and provide reasonable assumptions. There is another condition however: the algorithm, in its finished state, MUST be stricly Python code. This means no pretrained models or presets. It must find its own data and process it unsupervised. This structure is called a "semi-supervised" structure. Here, the data wil assume the following structure:
@@ -19,3 +19,6 @@ This is the "Who, What, When, Where, Why, How" of the data. This data can later 
 2. Reverse Image Search and Google Scraping(find label of image) -> Data Downloader(find dataset from large datasets)
 3. Transfer Learn Model -> Object Detector
 ```
+
+### Natural Language Processing
+Another key stage of this AGI(Artificial General Intelligence) is the huaman interaction and understanding. MAGIST will use a Transformer chatbot to listen to conversations and simultaneously train on them. When it is queried, it will collect information from the database, and use the transformer to fit a response. This will be done by using a GAN system infused into the transformer. The transformer will act as the discriminator to perform an integrity check. 
