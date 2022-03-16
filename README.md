@@ -3,7 +3,7 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 
 ## Working Principal
 Here is a flow diagram with the entire system drawn:
-<img src="blob:chrome-untrusted://media-app/82606eb9-7b46-437d-a082-f19578dc252f" alt=""/>![image](https://user-images.githubusercontent.com/85193239/158194561-7636e461-d3d2-484a-bf36-81db60488c22.png)
+<div style="width: 640px; height: 480px; margin: 10px; position: relative;"><iframe allowfullscreen frameborder="0" style="width:640px; height:480px" src="https://lucid.app/documents/embeddedchart/6d04c807-0b77-495e-9b84-3abf38f32630" id="n4v2Nt6jxWfH"></iframe></div>
 
 ### Data
 The data is the most important element as the entire intelligence works around it. That is why it is important for the AI to process it and provide reasonable assumptions. There is another condition however: the algorithm, in its finished state, MUST be stricly Python code. This means no pretrained models or presets. It must find its own data and process it unsupervised. This structure is called a "semi-supervised" structure. Here, the data wil assume the following structure:
