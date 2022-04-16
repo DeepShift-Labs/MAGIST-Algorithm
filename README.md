@@ -1,5 +1,5 @@
 # MAGIST-Algorithm
-Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Zeta
+Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Zeta!
 
 ## Working Principal
 Here is a flow diagram with the entire system drawn:
