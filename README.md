@@ -24,7 +24,7 @@ This is the "Who, What, When, Where, Why, How" of the data. This data can later 
 Another key stage of this AGI(Artificial General Intelligence) is the huaman interaction and understanding. MAGIST will use a Transformer chatbot to listen to conversations and simultaneously train on them. When it is queried, it will collect information from the database, and use the transformer to fit a response. This will be done by using a GAN system infused into the transformer. The transformer will act as the discriminator to perform an integrity check. 
 
 ## Usage
-This project is still under development. Please contact me at [deepshiftlabs@outlook.com]() if you want immediate access to MAGIST. Once the algorithm is in a stable state, I will release a Python Package on PYPI and Github for access.
+This project is still under development. Please contact me at [deepshiftlabs@outlook.com]() if you want immediate access to MAGIST. Once the algorithm is in a stable state, I will release a Python Package on PYPI and Github for access. There will also be a wiki with more instructions.
 
 
 ## Contributing
