@@ -7,6 +7,11 @@
 *.jpeg
 *.npz
 
+ckpt*
+testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/pre-trained-models
+testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/models
+
+
 *.xml
 *.tfrecords
 *.pbtxt
@@ -140,3 +145,22 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+
+testing/TF_Custom_Detector/cocoapi/images/
+testing/TF_Custom_Detector/cocoapi/annotations/
+testing/TF_Custom_Detector/cocoapi/results/
+testing/TF_Custom_Detector/cocoapi/external/
+testing/TF_Custom_Detector/cocoapi/.DS_Store
+
+testing/TF_Custom_Detector/cocoapi/MatlabAPI/analyze*/
+testing/TF_Custom_Detector/cocoapi/MatlabAPI/visualize*/
+testing/TF_Custom_Detector/cocoapi/MatlabAPI/private/maskApiMex.*
+
+testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/__init__.pyc
+testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/_mask.c
+testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/_mask.so
+testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/coco.pyc
+testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/cocoeval.pyc
+testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/mask.pyc

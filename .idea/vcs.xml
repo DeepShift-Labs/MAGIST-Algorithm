@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/testing/TF_Custom_Detector/TensorFlow/models" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/testing/TF_Custom_Detector/cocoapi" vcs="Git" />
   </component>
 </project>
