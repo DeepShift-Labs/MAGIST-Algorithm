@@ -1,2 +1,2 @@
-# convolutional neural network for image recognition
-def copilot:
+# load image into array
+def array_of_im:
