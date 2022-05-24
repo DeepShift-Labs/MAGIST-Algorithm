@@ -8,6 +8,7 @@
 *.npz
 
 testing/rasa_nlp_testing*
+DataBase*
 
 
 ckpt*
