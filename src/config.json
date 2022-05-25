@@ -3,6 +3,6 @@
     {"log_dir": "/home/krishna/Documents/Github/MAGIST-Algorithm/src/Logs"}
   ],
   "basic_variables": [
-    {"verbose": 0}
+    {"verbose": 1}
   ]
 }

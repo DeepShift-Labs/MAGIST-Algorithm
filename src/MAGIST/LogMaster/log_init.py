@@ -1,9 +1,11 @@
 import logging
 import json
-import os
+import os, pathlib
 
 class MainLogger():
     def __init__(self, config):
+        config = pathlib.Path(config)
+        config = config.resolve()
         f = open(config)
         config = json.load(f)
 

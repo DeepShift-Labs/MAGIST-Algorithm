@@ -1,5 +1,5 @@
-# from MAGIST.WebScraper.google import GoogleScraper
-#
-# searcher = GoogleScraper('AIzaSyD8imJeBtrVtSJdpFuUgdMQ_oRsbFigc1k', 'd768e8d28e79fb322')
+from MAGIST.WebScraper.wikipedia import WikipediaScraper
 
+scraper = WikipediaScraper("config.json")
 
+print(scraper.get_summary("doors"))
