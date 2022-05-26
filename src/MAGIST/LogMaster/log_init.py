@@ -1,11 +1,21 @@
+"""Establish major logger functions for individual scripts.
+
+MainLogger is the main class containing 1 main function that provides a unique logging instance to each script.
+"""
+
 import logging
 import json
 import os, pathlib
 
 class MainLogger():
+    # Logging Class
     def __init__(self, config):
+        """Initialize class and parse config
+
+        :param config: A relative or absolute path to master config JSON file.
+        """
         config = pathlib.Path(config)
-        config = config.resolve()
+        config = config.resolve() # Find absolute path from a relative one.
         f = open(config)
         config = json.load(f)
 
@@ -16,7 +26,7 @@ class MainLogger():
 
     def StandardLogger(self, name):
         logger = logging.getLogger(name)
-        if not self.verbose:
+        if not self.verbose: # Enable verbose depending on flag set by the config file.
             logger.setLevel(logging.WARNING)
         else:
             logger.setLevel(logging.DEBUG)
@@ -34,7 +44,7 @@ class MainLogger():
         logger.addHandler(fh)
         logger.addHandler(error)
 
-        print(f"LogMaster Initialized Successfully ===> {os.path.join(self.log_dir, 'complete.log')}")
+        logger.info(f"{name}'s LogMaster Instance Initialized Successfully ===> {os.path.join(self.log_dir, 'complete.log')}")
 
         return logger
 
