@@ -18,7 +18,7 @@ class WikipediaScraper:
 		:param config: A relative or absolute path to master config JSON file.
 		"""
 		root_log = MainLogger(config)
-		self.log = root_log.StandardLogger("GoogleScraper")  # Create a script specific logging instance
+		self.log = root_log.StandardLogger("WikipediaScraper")  # Create a script specific logging instance
 
 	def get_summary(self, keyword):
 		"""Get summary of Wikipedia post given a keyword.

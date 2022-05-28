@@ -20,9 +20,15 @@ class MainLogger():
         config = json.load(f)
 
         for i in config['paths']:
-            self.log_dir = i["log_dir"]
-        for i in config['basic_variables']:
-            self.verbose = i["verbose"]
+            try:
+                self.log_dir = i["log_dir"]
+            except KeyError:
+                pass
+        for j in config['basic_variables']:
+            try:
+                self.verbose = j["verbose"]
+            except KeyError:
+                pass
 
     def StandardLogger(self, name):
         logger = logging.getLogger(name)

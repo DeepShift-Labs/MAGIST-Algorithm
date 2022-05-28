@@ -5,7 +5,6 @@ from skimage.io import imread, imshow, imsave
 from skimage.transform import resize
 from sklearn.cluster import KMeans
 from skimage.util import img_as_uint
-import fiftyone.zoo as foz
 import search
 
 def image_to_pandas(image):
