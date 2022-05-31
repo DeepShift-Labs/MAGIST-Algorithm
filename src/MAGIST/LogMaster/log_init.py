@@ -9,6 +9,7 @@ import os, pathlib
 
 class MainLogger():
     # Logging Class
+
     def __init__(self, config):
         """Initialize class and parse config
 

@@ -9,6 +9,7 @@
 
 testing/rasa_nlp_testing*
 DataBase*
+src/config.json
 
 
 ckpt*

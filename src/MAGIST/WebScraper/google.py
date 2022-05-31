@@ -12,7 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from google_images_search import GoogleImagesSearch
 from tqdm import tqdm
-import pathlib
+import pathlib, json
 
 from ..LogMaster.log_init import MainLogger
 
@@ -20,13 +20,13 @@ from ..LogMaster.log_init import MainLogger
 class GoogleScraper:
 	"""Main Google Images scraping and downloading tool."""
 
-	def __init__(self, config, dev_api_key, project_cx_id):
+	def __init__(self, config):
 		"""Initializes the class and authenticates Google Search API with credentials and parses config file. It also
 		initializes the logger.
 
 		:param config: A relative or absolute path to master config JSON file.
-		:param dev_api_key: API key acquired from Google Search API webpage.
-		:param project_cx_id: The Search Engine ID provided by Google per Google Developer Project.
+		:param dev_api_key DEPRECATED: API key acquired from Google Search API webpage.
+		:param project_cx_id DEPRECATED: The Search Engine ID provided by Google per Google Developer Project.
 
 		Note: The CX ID is hard to find. To find it, first go to: http://www.google.com/cse/manage/all. Select your
 		project and the ID will be called: "Search engine ID". Go to this StackOverflow question and PyPi Post for more
@@ -55,9 +55,39 @@ class GoogleScraper:
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("GoogleScraper")  # Create a script specific logging instance
 
-		self.gis = GoogleImagesSearch(dev_api_key, project_cx_id, progressbar_fn=my_progressbar)  # Authenticate Google
-		# Image Search
-		self.log.info("Google Image Search initialized and authorized successfully.")
+		config = pathlib.Path(config)
+		config = config.resolve()  # Find absolute path from a relative one.
+		f = open(config)
+		config = json.load(f)
+
+		for i in config['api_authentication']:
+			try:
+				google_conf = i["google"]
+				for j in google_conf:
+					try:
+						self.dev_api_key = j["api_key"]
+					except KeyError:
+						pass
+					try:
+						self.project_cx_id = j["project_cx"]
+					except KeyError:
+						pass
+			except KeyError:
+				pass
+
+		try:
+			self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=my_progressbar)
+			# Authenticate Google Image Search
+			self.log.info("Google Image Search initialized and authorized successfully.")
+			self.log.warning("Google API Authentication verification is currently non-functional. If some functionality "
+			                 "regarding Google APIs fails, your API key and Project CX token are likely incorrect.")
+		except:
+			self.log.error("Google Image Search failed to initialize. Perhaps your authentication information in the "
+			               "designated config file is erroneous.")
+			self.log.info("""The CX ID is hard to find. To find it, first go to: http://www.google.com/cse/manage/all. Select your
+		project and the ID will be called: "Search engine ID". Go to this StackOverflow question and PyPi Post for more
+		info: https://stackoverflow.com/questions/6562125/getting-a-cx-id-for-custom-search-google-api-python &
+		https://pypi.org/project/Google-Images-Search/""")
 
 	def reverse_image_search(self, image_path):
 		"""Takes a given image path and finds the object name using Google Reverse Image Search and scraping.
@@ -68,7 +98,7 @@ class GoogleScraper:
 		filePath = image_path
 
 		filePath = pathlib.Path(filePath)
-		filePath = filePath.resolve() # Find the absolute path from relative one.
+		filePath = filePath.resolve()  # Find the absolute path from relative one.
 		filePath = str(filePath)
 
 		searchUrl = 'http://www.google.com/searchbyimage/upload'
@@ -122,11 +152,12 @@ class GoogleScraper:
 		}
 
 		filePath = pathlib.Path(download_location)
-		filePath = filePath.resolve() # Find the absolute path from relative one.
+		filePath = filePath.resolve()  # Find the absolute path from relative one.
 		filePath = str(filePath)
 
 		self.log.info(f"Initiating Google Image Search for key term: {keyword}.")
-		self.gis.search(search_params=_search_params, path_to_dir=download_location) # Search and download images. Note:
+		self.gis.search(search_params=_search_params,
+		                path_to_dir=download_location)  # Search and download images. Note:
 		# This function hangs for a while after completion but still exits eventually.
 		self.log.info(f"Successfully downloaded {quantity} images to {filePath}.")
 
