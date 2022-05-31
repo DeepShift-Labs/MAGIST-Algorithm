@@ -1,4 +1,10 @@
 {
+  "api_authentication": [
+    {"google": [
+      {"api_key": "***"},
+      {"project_cx": "***"}
+    ]}
+  ],
   "paths": [
     {"log_dir": "/home/krishna/Documents/Github/MAGIST-Algorithm/src/Logs"}
   ],
