@@ -6,7 +6,7 @@ The coordinate_compute function takes a given input image size and divides the i
 pixel coordinates of each segment. The crop_segments function will take an array of pixel coordinates, crop the image
 segment, and export it to a given directory.
 """
-
+import PIL
 from PIL import Image, UnidentifiedImageError
 import os, pathlib
 from tqdm import tqdm
@@ -44,20 +44,28 @@ class ImageSlicer:
 
 		counter = 0
 
-		for f in files:  # for i in range(image_count + 1):
+		self.log.info("Resizing images...")
+
+		for f in tqdm(files):  # for i in range(image_count + 1):
 			try:
 				image_path = os.path.join(base_path, str(f))  # str(base_path) + "/Frame(" + str(i) + ").jpg"
-				print(image_path)
-				img = Image.open(image_path)
-				resizedImage = img.resize(size)
-				resizedImage = resizedImage.convert('RGB')
-				resizedImage.save(image_path)
-				counter += 1
+				try:
+					img = Image.open(image_path)
+					resizedImage = img.resize(size)
+					resizedImage = resizedImage.convert('RGB')
+					resizedImage.save(image_path)
+					counter += 1
+				except PIL.UnidentifiedImageError:
+					self.log.warning("Unidentified image: {}".format(image_path))
 
-			except (FileNotFoundError, UnidentifiedImageError) as error:
+
+			except (FileNotFoundError, UnidentifiedImageError, ValueError) as error:
 				if error == UnidentifiedImageError:
 					print("Unidentified image: {}".format(image_path))
-				print("Resize Skip")
+				if error == FileNotFoundError:
+					print("Image Not Found: {}".format(image_path))
+				if error == ValueError:
+					print("Image Type Not Supported: {}".format(image_path))
 
 		self.log.info("Resized {} files in {}".format(counter, base_path))
 
@@ -132,12 +140,16 @@ class ImageSlicer:
 
 		for f in tqdm(files):  # for i in range(image_count + 1):
 			image_path = os.path.join(start_path, str(f))
-			img = Image.open(image_path)
+			try:
+				img = Image.open(image_path)
+			except PIL.UnidentifiedImageError:
+				self.log.warning("Unidentified image: {}".format(image_path))
 
 			for c in range(len(coordinates)):
 				box = (int(coordinates[c][0]), int(coordinates[c][1]), int(coordinates[c][2]), int(coordinates[c][3]))
 				croppedImage = img.crop(box)
 				save_location = os.path.join(end_path, img_class, "Frame" + str(counter) + str(c) + ".jpg")
+				croppedImage = croppedImage.convert('RGB')
 				croppedImage.save(save_location)
 
 				counter += 1

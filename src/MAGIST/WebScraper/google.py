@@ -12,7 +12,8 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from google_images_search import GoogleImagesSearch
 from tqdm import tqdm
-import pathlib, json
+import pathlib, json, sys
+from googleapiclient.errors import HttpError
 
 from ..LogMaster.log_init import MainLogger
 
@@ -41,8 +42,9 @@ class GoogleScraper:
 			:param progress: The percentage of progress in downloading the file.
 			:return: None
 			"""
-			t = tqdm(total=100, desc=url)
-			t.update(progress)
+			print(url + ' ' + str(progress) + '%')
+			# t = tqdm(total=100, desc=url)
+			# t.update(progress)
 
 		# try:
 		#     if(progress == 1):
@@ -76,12 +78,12 @@ class GoogleScraper:
 				pass
 
 		try:
-			self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=my_progressbar)
+			self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=my_progressbar, validate_images=True)
 			# Authenticate Google Image Search
 			self.log.info("Google Image Search initialized and authorized successfully.")
 			self.log.warning("Google API Authentication verification is currently non-functional. If some functionality "
 			                 "regarding Google APIs fails, your API key and Project CX token are likely incorrect.")
-		except:
+		except HttpError:
 			self.log.error("Google Image Search failed to initialize. Perhaps your authentication information in the "
 			               "designated config file is erroneous.")
 			self.log.info("""The CX ID is hard to find. To find it, first go to: http://www.google.com/cse/manage/all. Select your
@@ -156,8 +158,21 @@ class GoogleScraper:
 		filePath = str(filePath)
 
 		self.log.info(f"Initiating Google Image Search for key term: {keyword}.")
-		self.gis.search(search_params=_search_params,
+
+		try:
+			self.gis.search(search_params=_search_params,
 		                path_to_dir=download_location)  # Search and download images. Note:
+		except HttpError as e:
+			self.log.warning(f"Google Image Search failed to complete. Retrying with next page. Error: {e}")
+			self.gis.next_page(search_again=True)
+			pass
+		# 	self.log.fatal("Google Image Search failed to initialize. Perhaps your authentication information in the "
+		# 	               "designated config file is erroneous.")
+		# 	self.log.info("""The CX ID is hard to find. To find it, first go to: http://www.google.com/cse/manage/all. Select your
+		# 	project and the ID will be called: "Search engine ID". Go to this StackOverflow question and PyPi Post for more
+		# 	info: https://stackoverflow.com/questions/6562125/getting-a-cx-id-for-custom-search-google-api-python &
+		# 	https://pypi.org/project/Google-Images-Search/""")
+		# 	sys.exit("System crash due to authentication error.")
 		# This function hangs for a while after completion but still exits eventually.
 		self.log.info(f"Successfully downloaded {quantity} images to {filePath}.")
 
