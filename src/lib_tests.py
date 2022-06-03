@@ -6,7 +6,7 @@ EPOCHS = 100
 BATCH_SIZE = 32
 INPUT_IMAGE_SIZE = (60, 60)
 VAL_SPLIT = 0.2
-DATA_IN_DIR = "Sliced"
+DATA_IN_DIR = "PetImages"
 SEED = 42
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -44,25 +44,25 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 )
 
 model = tf.keras.Sequential([
-	Conv2D(32, kernel_size=(3,3), stride=(1, 1), padding='same', activation='relu', input_shape=(60, 60, 3)),
+	Conv2D(32, kernel_size=(3,3), strides=(1, 1), padding='same', activation='relu', input_shape=(60, 60, 3)),
 	BatchNormalization(),
 
-	Conv2D(64, kernel_size=(3,3), stride=(1, 1), padding='same', activation='relu'),
+	Conv2D(64, kernel_size=(3,3), strides=(1, 1), padding='same', activation='relu'),
 	BatchNormalization(),
 
-	Conv2D(128, kernel_size=(3,3), stride=(1, 1), padding='same', activation='relu'),
+	# Conv2D(128, kernel_size=(3,3), strides=(1, 1), padding='same', activation='relu'),
+	# BatchNormalization(),
+	#
+	# Conv2D(128, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'),
+	# BatchNormalization(),
+
+	# Conv2D(128, kernel_size=(4, 4), strides=(1, 1), padding='same', activation='relu'),
+	# BatchNormalization(),
+
+	Conv2D(64, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'),
 	BatchNormalization(),
 
-	Conv2D(128, kernel_size=(3, 3), stride=(1, 1), padding='same', activation='relu'),
-	BatchNormalization(),
-
-	Conv2D(128, kernel_size=(4, 4), stride=(1, 1), padding='same', activation='relu'),
-	BatchNormalization(),
-
-	Conv2D(64, kernel_size=(3, 3), stride=(1, 1), padding='same', activation='relu'),
-	BatchNormalization(),
-
-	Conv2D(32, kernel_size=(3, 3), stride=(1, 1), padding='same', activation='relu'),
+	Conv2D(32, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'),
 	BatchNormalization(),
 
 	Flatten(),
@@ -75,8 +75,7 @@ model = tf.keras.Sequential([
 ])
 
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
-              loss=tf.keras.losses.BinaryCrossentropy(), metrics=['accuracy'])
-
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(), metrics=['accuracy'])
 checkpoint_path = "training/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 

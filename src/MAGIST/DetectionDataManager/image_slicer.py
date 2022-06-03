@@ -156,6 +156,40 @@ class ImageSlicer:
 
 		self.log.info("Cropped {} files in {}".format(counter, start_path))
 
+	def image_integrity_verification(self, path, delete_invalid=True):
+		"""Verify the integrity of the images in a given directory.
+
+		:param path: The directory containing the images to verify.
+		:param delete_invalid: Whether to delete the invalid images.
+		"""
+		path = pathlib.Path(path)
+		path = path.resolve()  # Find the absolute path from relative one.
+		path = str(path)
+
+		onlyfiles = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+
+		bad_files = 0
+		good_files = 0
+
+		if delete_invalid:
+			self.log.info("Deleting invalid files...")
+		else:
+			self.log.info("Delete option disabled. Skipping invalid files...")
+
+		for f in onlyfiles:
+			try:
+				img = Image.open(os.path.join(path, f)).load()
+				good_files += 1
+			except (PIL.UnidentifiedImageError, Exception) as error:
+				bad_files += 1
+				if delete_invalid:
+					os.remove(os.path.join(path, f))
+				self.log.warning(f'Invalid image: {os.path.join(path, f)}')
+
+		if delete_invalid:
+			self.log.info("Deleted {} invalid files of {}.".format(bad_files, bad_files + good_files))
+		else:
+			self.log.info(f'{bad_files} invalid files of {bad_files + good_files} were found.')
 
 # resizer((500, 500), "Input")
 # coordinates = coordinate_compute((500, 500), (100, 100))

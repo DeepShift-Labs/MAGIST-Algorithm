@@ -7,6 +7,9 @@
 *.jpeg
 *.npz
 
+*.zip
+src/training/*
+
 testing/rasa_nlp_testing*
 DataBase*
 
