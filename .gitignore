@@ -7,6 +7,14 @@
 *.jpeg
 *.npz
 
+*.zip
+src/training/*
+
+testing/rasa_nlp_testing*
+DataBase*
+
+
+
 ckpt*
 testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/pre-trained-models
 testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/models

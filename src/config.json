@@ -1,0 +1,15 @@
+{
+  "api_authentication": [
+    {"google": [
+      {"api_key": "AIzaSyD8imJeBtrVtSJdpFuUgdMQ_oRsbFigc1k"},
+      {"project_cx": "d768e8d28e79fb322"}
+    ]}
+  ],
+  "paths": [
+    {"log_dir": "/home/krishna/Documents/Github/MAGIST-Algorithm/src/Logs"}
+  ],
+  "basic_variables": [
+    {"verbose": 1},
+    {"enable_matplot_display":  1}
+  ]
+}
