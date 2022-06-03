@@ -1,8 +1,8 @@
 {
   "api_authentication": [
     {"google": [
-      {"api_key": "AIzaSyD8imJeBtrVtSJdpFuUgdMQ_oRsbFigc1k"},
-      {"project_cx": "d768e8d28e79fb322"}
+      {"api_key": "***"},
+      {"project_cx": "***"}
     ]}
   ],
   "paths": [
