@@ -6,7 +6,7 @@
     ]}
   ],
   "paths": [
-    {"log_dir": "/home/krishna/Documents/Github/MAGIST-Algorithm/src/Logs"}
+    {"log_dir": "PATH/TO/MAGIST/DIR/src/Logs"}
   ],
   "basic_variables": [
     {"verbose": 1},
