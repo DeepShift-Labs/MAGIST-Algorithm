@@ -7,22 +7,27 @@
 *.jpeg
 *.npz
 
+# Training and Checkpoint files
 *.zip
 src/training/*
+ckpt*
+testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/pre-trained-models
+testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/models
+*.xml
+*.tfrecords
+*.pbtxt
 
 testing/rasa_nlp_testing*
+
+# MongoDB
 DataBase*
 
 
 
-ckpt*
-testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/pre-trained-models
-testing/TF_Custom_Detector/TensorFlow/workspace/training_demo/models
 
 
-*.xml
-*.tfrecords
-*.pbtxt
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

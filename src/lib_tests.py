@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization
-import os
+import os, datetime
 
 EPOCHS = 100
 BATCH_SIZE = 32
@@ -24,6 +24,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
 	interpolation='bilinear',
 	follow_links=False,
 	crop_to_aspect_ratio=False,
+	# class_mode='sparse'
 )
 
 val_ds = tf.keras.utils.image_dataset_from_directory(
@@ -41,44 +42,23 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 	interpolation='bilinear',
 	follow_links=False,
 	crop_to_aspect_ratio=False,
+	# class_mode='sparse'
 )
 
 model = tf.keras.Sequential([
-	Conv2D(32, kernel_size=(3,3), strides=(1, 1), padding='same', activation='relu', input_shape=(60, 60, 3)),
-	BatchNormalization(),
-
-	Conv2D(64, kernel_size=(3,3), strides=(1, 1), padding='same', activation='relu'),
-	BatchNormalization(),
-
-	# Conv2D(128, kernel_size=(3,3), strides=(1, 1), padding='same', activation='relu'),
-	# BatchNormalization(),
-	#
-	# Conv2D(128, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'),
-	# BatchNormalization(),
-
-	# Conv2D(128, kernel_size=(4, 4), strides=(1, 1), padding='same', activation='relu'),
-	# BatchNormalization(),
-
-	Conv2D(64, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'),
-	BatchNormalization(),
-
-	Conv2D(32, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'),
-	BatchNormalization(),
-
-	Flatten(),
-
-	Dense(128, activation='relu'),
-	Dropout(0.5),
-	Dense(64, activation='relu'),
-	Dropout(0.5),
+	Flatten(input_shape=(60, 60, 3)),
+	Dense(28, activation='relu'),
 	Dense(2, activation='softmax')
 ])
 
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(), metrics=['accuracy'])
-checkpoint_path = "training/cp.ckpt"
+              loss="sparse_categorical_crossentropy", metrics=['accuracy'])
+checkpoint_path = "training_ckpt/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=False, verbose=1)
 
-history = model.fit(train_ds, epochs=EPOCHS, steps_per_epoch=10, validation_data=val_ds, validation_steps=10, batch_size=BATCH_SIZE, validation_batch_size=BATCH_SIZE, use_multiprocessing=True, callbacks=[cp_callback])
+log_dir = "tensorboard_logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1, update_freq='batch')
+
+history = model.fit(train_ds, epochs=EPOCHS, steps_per_epoch=10, validation_data=val_ds, validation_steps=10, batch_size=BATCH_SIZE, validation_batch_size=BATCH_SIZE, use_multiprocessing=True, callbacks=[cp_callback, tensorboard_callback])

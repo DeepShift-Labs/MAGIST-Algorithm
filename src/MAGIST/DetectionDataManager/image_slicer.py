@@ -176,7 +176,7 @@ class ImageSlicer:
 		else:
 			self.log.info("Delete option disabled. Skipping invalid files...")
 
-		for f in onlyfiles:
+		for f in tqdm(onlyfiles):
 			try:
 				img = Image.open(os.path.join(path, f)).load()
 				good_files += 1
@@ -190,6 +190,25 @@ class ImageSlicer:
 			self.log.info("Deleted {} invalid files of {}.".format(bad_files, bad_files + good_files))
 		else:
 			self.log.info(f'{bad_files} invalid files of {bad_files + good_files} were found.')
+
+	def convert_img_to_png(self, path):
+		"""Convert all images in a given directory to PNG format.
+
+		:param path: The directory containing the images to convert.
+		"""
+		path = pathlib.Path(path)
+		path = path.resolve()  # Find the absolute path from relative one.
+		path = str(path)
+
+		onlyfiles = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+
+		for f in tqdm(onlyfiles):
+			try:
+				img = Image.open(os.path.join(path, f))
+				img.save(f"{os.path.join(path, f)}.png")
+				os.system(f"rm {os.path.join(path, f)}")
+			except (PIL.UnidentifiedImageError, Exception) as error:
+				self.log.warning(f'Invalid image: {os.path.join(path, f)}')
 
 # resizer((500, 500), "Input")
 # coordinates = coordinate_compute((500, 500), (100, 100))
