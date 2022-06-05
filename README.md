@@ -94,5 +94,5 @@ Please consider contributing. Even the smallest change to my README will be grea
 ***
 
 # Disclaimer
-Artificial Intelligence is a powerful field of research and study, and it should be kept that way. Unethical use of the AI can have severe repercussions to society and to the perpetrator. DeepShift Labs is strictly a research company and all of our programs follow. Hence, all of our products, MAGIST included, are to be used **strictly** for research purposes. Misuse of this program can lead to heavy fines and prosecution.
+Artificial Intelligence is a powerful field **meant only for research and study**, and it should be kept that way. Unethical use of the AI can have severe repercussions to society and to the perpetrator. DeepShift Labs and any programs it develops are strictly for research purposes. Hence, all of our products, MAGIST included, are to be used **strictly** for research purposes. Misuse of this program can lead to heavy fines and prosecution.
 Furthermore, to retitle, rebrand, or redistribute without **explicitly** crediting DeepShift Labs is illegal. 
