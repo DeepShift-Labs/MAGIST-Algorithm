@@ -4,9 +4,9 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
 from tqdm import tqdm
 
-EPOCHS = 5
-BATCH_SIZE = 32
-INPUT_IMAGE_SIZE = (60, 60)
+EPOCHS = 1
+BATCH_SIZE = 10
+INPUT_IMAGE_SIZE = (160, 160)
 VAL_SPLIT = 0.2
 DATA_IN_DIR = "Data"
 SEED = 42
@@ -161,6 +161,7 @@ for epoch in (pbar_epoch := tqdm(range(EPOCHS))):
 		# callbacks.on_train_batch_begin(images)
 		pbar_train.set_description("Train Step: ")
 		train_step(images, labels)
+		pbar_train.set_postfix({"loss": float(train_loss.result()), "accuracy": float(train_accuracy.result())*100})
 		ckpt.step.assign_add(1)
 	with train_summary_writer.as_default():
 		tf.summary.scalar('loss', train_loss.result(), step=epoch)
@@ -169,6 +170,7 @@ for epoch in (pbar_epoch := tqdm(range(EPOCHS))):
 	for test_images, test_labels in (pbar_test := tqdm(val_ds.take(BATCH_SIZE), leave=False)):
 		pbar_test.set_description("Test Step: ")
 		test_step(test_images, test_labels)
+		pbar_test.set_postfix({"loss": float(test_loss.result()), "accuracy": float(test_accuracy.result())*100})
 	with test_summary_writer.as_default():
 		tf.summary.scalar('loss', test_loss.result(), step=epoch)
 		tf.summary.scalar('accuracy', test_accuracy.result(), step=epoch)
@@ -182,6 +184,9 @@ for epoch in (pbar_epoch := tqdm(range(EPOCHS))):
 	train_accuracy_arr.append(train_accuracy.result() * 100)
 	test_loss_arr.append(test_loss.result())
 	test_accuracy_arr.append(test_accuracy.result() * 100)
+
+	pbar_epoch.set_postfix({"train_loss": float(train_loss.result()), "test_loss": float(test_loss.result()), "test_accuracy": float(test_accuracy.result())*100, "train_accuracy": float(train_accuracy.result())*100})
+
 # callbacks.on_epoch_end(epoch)
 # callbacks.on_train_end()
 
