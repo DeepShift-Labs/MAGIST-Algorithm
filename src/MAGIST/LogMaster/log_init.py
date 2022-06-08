@@ -31,6 +31,10 @@ class MainLogger():
             except KeyError:
                 pass
 
+        self.log_dir = pathlib.Path(self.log_dir)
+        self.log_dir = self.log_dir.resolve()  # Find absolute path from a relative one.
+        self.log_dir = str(self.log_dir)
+
     def StandardLogger(self, name):
         logger = logging.getLogger(name)
         if not self.verbose: # Enable verbose depending on flag set by the config file.

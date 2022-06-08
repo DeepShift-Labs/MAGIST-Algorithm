@@ -6,10 +6,20 @@
     ]}
   ],
   "paths": [
-    {"log_dir": "PATH/TO/MAGIST/DIR/src/Logs"}
+    {"log_dir": "PATH/TO/Logs"}
   ],
   "basic_variables": [
-    {"verbose": 1},
-    {"enable_matplot_display":  1}
+    {"verbose": BINARY},
+    {"enable_matplot_display":  BINARY}
+  ],
+  "tf_lite_detector": [
+    {"data_path": "PATH/TO/Data"},
+    {"TensorBoard_log_dir": "PATH/TO/TensorBoard/LOGS"},
+    {"TF_ckpt_path": "PATH/TO/tf_ckpt"},
+    {"input_image_size": [LENGTH, WIDTH]},
+    {"epochs": INT},
+    {"batch_size": INT},
+    {"seed": INT},
+    {"validation_split":  FLOAT}
   ]
 }
