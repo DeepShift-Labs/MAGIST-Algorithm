@@ -14,4 +14,4 @@ Currently, there are no releases that will have continuous security patches.
 --->
 ## Reporting a Vulnerability
 
-If you have a severe security vunerability, DO NOT HESITATE to (email us.)[deepshiftlabs@outlook.com] Otherwise, please raise an issue with the `vunerability` tag.
+If you have a severe security vunerability, DO NOT HESITATE to [email us.](deepshiftlabs@outlook.com) Otherwise, please raise an issue with the `vunerability` tag.
