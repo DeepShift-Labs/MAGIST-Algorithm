@@ -1,4 +1,4 @@
-"""Provides basic functions to prepare data for MAGIST lite detection.
+"""Provides basic functions to prepare text_ds for MAGIST lite detection.
 
 The class ImageSlicer is the main class containing 3 functions: resizer, coordinate_compute, and crop_segments. The
 resizer function takes a given image path and resizes it to a given size. It will resize all images in that directory.

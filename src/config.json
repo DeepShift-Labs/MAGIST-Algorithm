@@ -14,12 +14,13 @@
   ],
   "tf_lite_detector": [
     {"data_path": "PATH/TO/Data"},
-    {"TensorBoard_log_dir": "PATH/TO/TensorBoard/LOGS"},
+    {"TensorBoard_log_dir": "PATH/TO/TensorBoard"},
     {"TF_ckpt_path": "PATH/TO/tf_ckpt"},
-    {"input_image_size": [LENGTH, WIDTH]},
+    {"input_image_size": [PXL_WIDTH, PXL_HEIGHT]},
     {"epochs": INT},
     {"batch_size": INT},
     {"seed": INT},
-    {"validation_split":  FLOAT}
+    {"validation_split":  FLOAT},
+    {"export_full_model": "PATH/TO/Full_TF_Model"}
   ]
 }

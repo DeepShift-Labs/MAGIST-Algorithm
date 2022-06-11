@@ -1,4 +1,15 @@
-import datetime, json, pathlib
+"""Contains all necessary functions to train and use the MAGIST Lite Detector.
+
+MAGIST Lite is a fully-supervised model that is trained on a large dataset of images. It contains 2 classes: MAGIST_CNN
+and MAGIST_CNN_Predictor.
+"""
+
+import datetime
+import json
+import os
+import pathlib
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
@@ -10,8 +21,10 @@ from skimage import transform
 
 from ..LogMaster.log_init import MainLogger
 
+
 class _CNN(tf.keras.models.Model):
 	def __init__(self):
+		"""Initialize the model."""
 		super(_CNN, self).__init__()
 		self.conv1 = Conv2D(32, (3, 3), activation='relu')
 		self.conv2 = Conv2D(64, (3, 3), activation='relu')
@@ -27,6 +40,10 @@ class _CNN(tf.keras.models.Model):
 		self.dense4 = Dense(10, activation='softmax')
 
 	def call(self, x):
+		"""Forward pass of the model.
+
+		:param x: A batch of images.
+		"""
 		x = self.conv1(x)
 		x = self.conv2(x)
 		# x = self.conv3(x)
@@ -40,6 +57,7 @@ class _CNN(tf.keras.models.Model):
 		x = self.dense3(x)
 		x = self.dense4(x)
 		return x
+
 
 class MAGIST_CNN():
 	def __init__(self, config):
@@ -88,6 +106,10 @@ class MAGIST_CNN():
 				self.validation_split = i["validation_split"]
 			except KeyError:
 				pass
+			try:
+				self.export_path = i["export_full_model"]
+			except KeyError:
+				pass
 
 		self.data_path = pathlib.Path(self.data_path)
 		self.data_path = self.data_path.resolve()  # Find absolute path from a relative one.
@@ -101,6 +123,10 @@ class MAGIST_CNN():
 		self.TF_ckpt_path = self.TF_ckpt_path.resolve()  # Find absolute path from a relative one.
 		self.TF_ckpt_path = str(self.TF_ckpt_path)
 
+		self.export_path = pathlib.Path(self.export_path)
+		self.export_path = self.export_path.resolve()  # Find absolute path from a relative one.
+		self.export_path = str(self.export_path)
+
 		self.epoch_arr = []
 		self.train_loss_arr = []
 		self.train_accuracy_arr = []
@@ -108,7 +134,7 @@ class MAGIST_CNN():
 		self.test_accuracy_arr = []
 
 	def load_data(self):
-		"""Loads the data from the data_path.
+		"""Loads the text_ds from the data_path.
 		"""
 		self.train_ds = tf.keras.utils.image_dataset_from_directory(
 			self.data_path,
@@ -146,6 +172,8 @@ class MAGIST_CNN():
 			# class_mode='sparse'
 		)
 
+		self.log.info("Data loaded and batched")
+
 		return self.train_ds, self.val_ds
 
 	def compile_model(self):
@@ -165,6 +193,8 @@ class MAGIST_CNN():
 		self.test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
 			name='test_accuracy')
 
+		self.log.info("Model optimizer and loss function set and compiled.")
+
 		return self.model
 
 	def callbacks_init(self):
@@ -177,24 +207,28 @@ class MAGIST_CNN():
 		self.test_summary_writer = tf.summary.create_file_writer(self.test_log_dir)
 
 		self.log_dir = f"{self.TensorBoard_log_dir}/tf_histograms/fit/" + \
-		          datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+		               datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 		self.tensorboard_callback = tf.keras.callbacks.TensorBoard(
 			log_dir=self.log_dir, histogram_freq=1, update_freq='batch')
 		self.tensorboard_callback.set_model(self.model)
 
 		self.callbacks = tf.keras.callbacks.CallbackList([self.tensorboard_callback])
 
-		self.ckpt = tf.train.Checkpoint(step=tf.Variable(1), optimizer=self.optimizer, net=self.model, iterator=self.train_ds)
+		self.ckpt = tf.train.Checkpoint(step=tf.Variable(1), optimizer=self.optimizer, net=self.model,
+		                                iterator=self.train_ds)
 		self.manager = tf.train.CheckpointManager(self.ckpt, f'{self.TF_ckpt_path}', max_to_keep=4000)
+
+		self.log.info(f"Callbacks initialized. TensorBoard histograms are logged to {self.log_dir}/tf_histograms. "
+		              f"TensorBoard training text_ds is stored in {self.log_dir}/train_logs/gradient_tape. Checkpoint "
+		              f"saved to {self.TF_ckpt_path}!")
 
 		self.ckpt.restore(self.manager.latest_checkpoint)
 		if self.manager.latest_checkpoint:
-			print("Restored from {}".format(self.manager.latest_checkpoint))
+			self.log("Restored from {}".format(self.manager.latest_checkpoint))
 		else:
-			print("Initializing from scratch.")
+			self.log("Initializing from scratch.")
 
 		return self.ckpt, self.manager, self.callbacks
-
 
 	@tf.function
 	def __train_step(self, images, labels):
@@ -220,7 +254,9 @@ class MAGIST_CNN():
 		self.test_accuracy(labels, predictions)
 
 	def train(self):
+		"""Trains the model."""
 		self.callbacks.on_train_begin()
+		self.log.info("Training started successfully.")
 		for epoch in (pbar_epoch := tqdm(range(self.epochs), ascii="░▒█")):
 			self.callbacks.on_epoch_begin(epoch)
 			pbar_epoch.set_description("Epoch Progress: ")
@@ -234,16 +270,19 @@ class MAGIST_CNN():
 				self.callbacks.on_train_batch_begin(images)
 				pbar_train.set_description("Train Step: ")
 				self.__train_step(images, labels)
-				pbar_train.set_postfix({"loss": float(self.train_loss.result()), "accuracy": float(self.train_accuracy.result())*100})
+				pbar_train.set_postfix(
+					{"loss": float(self.train_loss.result()), "accuracy": float(self.train_accuracy.result()) * 100})
 				self.ckpt.step.assign_add(1)
 			with self.train_summary_writer.as_default():
 				tf.summary.scalar('loss', self.train_loss.result(), step=epoch)
 				tf.summary.scalar('accuracy', self.train_accuracy.result(), step=epoch)
 
-			for test_images, test_labels in (pbar_test := tqdm(self.val_ds.take(self.batch_size), leave=False, ascii="░▒█")):
+			for test_images, test_labels in (
+					pbar_test := tqdm(self.val_ds.take(self.batch_size), leave=False, ascii="░▒█")):
 				pbar_test.set_description("Test Step: ")
 				self.__test_step(test_images, test_labels)
-				pbar_test.set_postfix({"loss": float(self.test_loss.result()), "accuracy": float(self.test_accuracy.result())*100})
+				pbar_test.set_postfix(
+					{"loss": float(self.test_loss.result()), "accuracy": float(self.test_accuracy.result()) * 100})
 			with self.test_summary_writer.as_default():
 				tf.summary.scalar('loss', self.test_loss.result(), step=epoch)
 				tf.summary.scalar('accuracy', self.test_accuracy.result(), step=epoch)
@@ -258,10 +297,12 @@ class MAGIST_CNN():
 			self.test_loss_arr.append(self.test_loss.result())
 			self.test_accuracy_arr.append(self.test_accuracy.result() * 100)
 
-			pbar_epoch.set_postfix({"train_loss": float(self.train_loss.result()), "test_loss": float(self.test_loss.result()), "test_accuracy": float(self.test_accuracy.result())*100, "train_accuracy": float(self.train_accuracy.result())*100})
+			pbar_epoch.set_postfix(
+				{"train_loss": float(self.train_loss.result()), "test_loss": float(self.test_loss.result()),
+				 "test_accuracy": float(self.test_accuracy.result()) * 100,
+				 "train_accuracy": float(self.train_accuracy.result()) * 100})
 			self.callbacks.on_epoch_end(epoch)
 		self.callbacks.on_train_end()
-
 
 		for i in range(len(self.epoch_arr)):
 			print(
@@ -272,7 +313,11 @@ class MAGIST_CNN():
 				f'Test Accuracy: {self.test_accuracy_arr[i]}'
 			)
 
+			self.model.save(self.export_path, save_format="tf", include_optimizer=True)
+			self.log.info("Model exported to {}.".format(self.export_path))
+
 	def get_class_names(self):
+		"""Returns the class names."""
 		if self.train_ds is None or self.val_ds is None:
 			self.log.error("Dataset not loaded! Please load dataset first using 'class.load_data()'.")
 			return None
@@ -281,19 +326,51 @@ class MAGIST_CNN():
 		if train_classes == test_classes:
 			return train_classes
 		else:
-			self.log.error("Class names do not match between train and test datasets. Please check your data.")
+			self.log.error("Class names do not match between train and test datasets. Please check your text_ds.")
 			return None
 
-class MAGIST_CNN_Predictor():
-	def __init__(self, config, magist_cnn):
-		root_log = MainLogger(config)
-		self.log = root_log.StandardLogger("MAGIST_Lite_CNN")  # Create a script specific logging instance
 
-		self.magist = magist_cnn
-		self.model = self.magist.compile_model()
-		self.ckpt, self.manager, self.callbacks = self.magist.callbacks_init()
+class MAGIST_CNN_Predictor():
+	def __init__(self, config):
+		root_log = MainLogger(config)
+		self.log = root_log.StandardLogger("MAGIST_Lite_Predictor")  # Create a script specific logging instance
+
+		config = pathlib.Path(config)
+		config = config.resolve()  # Find absolute path from a relative one.
+		f = open(config)
+		config = json.load(f)
+
+		for i in config['tf_lite_detector']:
+			try:
+				self.TF_ckpt_path = i["TF_ckpt_path"]
+			except KeyError:
+				pass
+			try:
+				self.export_path = i["export_full_model"]
+			except KeyError:
+				pass
+
+		self.export_path = pathlib.Path(self.export_path)
+		self.export_path = self.export_path.resolve()  # Find absolute path from a relative one.
+		self.export_path = str(self.export_path)
+
+		self.TF_ckpt_path = pathlib.Path(self.TF_ckpt_path)
+		self.TF_ckpt_path = self.TF_ckpt_path.resolve()  # Find absolute path from a relative one.
+		self.TF_ckpt_path = str(self.TF_ckpt_path)
+
+		self.imported = tf.keras.models.load_model(self.export_path, compile=False)
+		self.log.info("Model imported from {}.".format(self.export_path))
+
+		# latest = tf.train.latest_checkpoint(self.TF_ckpt_path)
+
+		# self.imported.load_weights(latest)
+		self.imported.summary()
 
 	def __load(self, filename):
+		"""Loads a file from the given filename.
+
+		:param filename: The filename to load.
+		"""
 		np_image = Image.open(filename)
 		np_image = np.array(np_image).astype('float32') / 255
 		np_image = transform.resize(np_image, (28, 28, 3))
@@ -301,12 +378,16 @@ class MAGIST_CNN_Predictor():
 		return np_image
 
 	def img_prediction(self, img_path):
+		"""Predicts the class of the given image.
+
+		:param img_path: The path to the image.
+		"""
 		img_path = pathlib.Path(img_path)
 		img_path = img_path.resolve()  # Find absolute path from a relative one.
 		img_path = str(img_path)
 
 		image = self.__load(img_path)
-		p = self.model.predict(image)
+		p = self.imported.predict(image)
 
 		p_id = np.array(p)
 		p_id = np.squeeze(p)
@@ -315,59 +396,25 @@ class MAGIST_CNN_Predictor():
 
 		return p, id
 
-	def predict_from_batch_data(self, autoload_data=True, in_train_ds=None, in_test_ds=None):
-		if autoload_data:
-			train_ds, test_ds = self.magist.load_data()
-		else:
-			train_ds = in_train_ds
-			test_ds = in_test_ds
+	def predict_from_batch_data(self, in_batch_ds):
+		"""Predicts the class of the given batch of images.
+
+		:param in_batch_ds: The batch of images.
+		"""
+		test_ds = in_batch_ds
 
 		img, label = next(iter(test_ds))
 		# print(len(img))
+		self.log.info("Predicting on batch of {} images.".format(len(img)))
 
 		ids = []
 		for i in img:
 			i = np.array(i)
 			i = np.expand_dims(i, axis=0)
-			p = self.model.predict(i)
+			p = self.imported.predict(i)
 			p = np.array(p)
 			p = np.squeeze(p)
 			max = p.max()
 			id = np.where(p == max)
 			ids.append(id[0])
-		return np.array(label), np.array(ids)
-
-
-"""
-
-def load(filename):
-   np_image = Image.open(filename)
-   np_image = np.array(np_image).astype('float32')/255
-   np_image = transform.resize(np_image, (28, 28, 3))
-   np_image = np.expand_dims(np_image, axis=0)
-   return np_image
-image = load('img_4.jpg')
-p = model.predict(image)
-
-p = np.array(p)
-p = np.squeeze(p)
-max = p.max()
-id = np.where(p == max)
-print(id)
-
-img, label = next(iter(val_ds))
-# print(len(img))
-
-ids = []
-for i in img:
-	i = np.array(i)
-	i = np.expand_dims(i, axis=0)
-	p = model.predict(i)
-	p = np.array(p)
-	p = np.squeeze(p)
-	max = p.max()
-	id = np.where(p == max)
-	ids.append(id[0])
-print(np.array(label))
-ids = np.array(ids)
-"""
+		return np.array(label), np.squeeze(np.array(ids))
