@@ -23,7 +23,8 @@ testing/rasa_nlp_testing*
 DataBase*
 
 
-
+# PIP build files
+build/dist
 
 
 
