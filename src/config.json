@@ -17,6 +17,7 @@
     {"TensorBoard_log_dir": "PATH/TO/TensorBoard"},
     {"TF_ckpt_path": "PATH/TO/tf_ckpt"},
     {"input_image_size": [PXL_WIDTH, PXL_HEIGHT]},
+    {"grayscale": BINARY},
     {"epochs": INT},
     {"batch_size": INT},
     {"seed": INT},
