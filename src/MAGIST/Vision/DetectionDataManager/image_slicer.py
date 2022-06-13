@@ -10,7 +10,7 @@ import PIL
 from PIL import Image, UnidentifiedImageError
 import os, pathlib
 from tqdm import tqdm
-from ..LogMaster.log_init import MainLogger
+from ...Utils.LogMaster.log_init import MainLogger
 
 
 class ImageSlicer:

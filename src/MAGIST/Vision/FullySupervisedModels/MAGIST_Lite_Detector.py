@@ -19,7 +19,7 @@ from PIL import Image
 import numpy as np
 from skimage import transform
 
-from ..LogMaster.log_init import MainLogger
+from ...Utils.LogMaster.log_init import MainLogger
 
 
 class _CNN(tf.keras.models.Model):
@@ -43,6 +43,8 @@ class _CNN(tf.keras.models.Model):
 		"""Forward pass of the model.
 
 		:param x: A batch of images.
+
+		:return: A batch of predictions.
 		"""
 		x = self.conv1(x)
 		x = self.conv2(x)
@@ -110,6 +112,10 @@ class MAGIST_CNN():
 				self.export_path = i["export_full_model"]
 			except KeyError:
 				pass
+			try:
+				self.grayscale = i["grayscale"]
+			except KeyError:
+				pass
 
 		self.data_path = pathlib.Path(self.data_path)
 		self.data_path = self.data_path.resolve()  # Find absolute path from a relative one.
@@ -135,42 +141,81 @@ class MAGIST_CNN():
 
 	def load_data(self):
 		"""Loads the text_ds from the data_path.
-		"""
-		self.train_ds = tf.keras.utils.image_dataset_from_directory(
-			self.data_path,
-			labels='inferred',
-			label_mode='int',
-			class_names=None,
-			color_mode='rgb',
-			batch_size=self.batch_size,
-			image_size=tuple(self.input_image_size),
-			shuffle=True,
-			seed=self.seed,
-			validation_split=self.validation_split,
-			subset='training',
-			interpolation='bilinear',
-			follow_links=False,
-			crop_to_aspect_ratio=False,
-			# class_mode='sparse'
-		)
 
-		self.val_ds = tf.keras.utils.image_dataset_from_directory(
-			self.data_path,
-			labels='inferred',
-			label_mode='int',
-			class_names=None,
-			color_mode='rgb',
-			batch_size=self.batch_size,
-			image_size=tuple(self.input_image_size),
-			shuffle=True,
-			seed=self.seed,
-			validation_split=self.validation_split,
-			subset='validation',
-			interpolation='bilinear',
-			follow_links=False,
-			crop_to_aspect_ratio=False,
-			# class_mode='sparse'
-		)
+		:return: The train_ds and test_ds.
+		"""
+		if self.grayscale:
+			self.train_ds = tf.keras.utils.image_dataset_from_directory(
+				self.data_path,
+				labels='inferred',
+				label_mode='int',
+				class_names=None,
+				color_mode='grayscale',
+				batch_size=self.batch_size,
+				image_size=tuple(self.input_image_size),
+				shuffle=True,
+				seed=self.seed,
+				validation_split=self.validation_split,
+				subset='training',
+				interpolation='bilinear',
+				follow_links=False,
+				crop_to_aspect_ratio=False,
+				# class_mode='sparse'
+			)
+
+			self.val_ds = tf.keras.utils.image_dataset_from_directory(
+				self.data_path,
+				labels='inferred',
+				label_mode='int',
+				class_names=None,
+				color_mode='grayscale',
+				batch_size=self.batch_size,
+				image_size=tuple(self.input_image_size),
+				shuffle=True,
+				seed=self.seed,
+				validation_split=self.validation_split,
+				subset='validation',
+				interpolation='bilinear',
+				follow_links=False,
+				crop_to_aspect_ratio=False,
+				# class_mode='sparse'
+			)
+		else:
+			self.train_ds = tf.keras.utils.image_dataset_from_directory(
+				self.data_path,
+				labels='inferred',
+				label_mode='int',
+				class_names=None,
+				color_mode='rgb',
+				batch_size=self.batch_size,
+				image_size=tuple(self.input_image_size),
+				shuffle=True,
+				seed=self.seed,
+				validation_split=self.validation_split,
+				subset='training',
+				interpolation='bilinear',
+				follow_links=False,
+				crop_to_aspect_ratio=False,
+				# class_mode='sparse'
+			)
+
+			self.val_ds = tf.keras.utils.image_dataset_from_directory(
+				self.data_path,
+				labels='inferred',
+				label_mode='int',
+				class_names=None,
+				color_mode='rgb',
+				batch_size=self.batch_size,
+				image_size=tuple(self.input_image_size),
+				shuffle=True,
+				seed=self.seed,
+				validation_split=self.validation_split,
+				subset='validation',
+				interpolation='bilinear',
+				follow_links=False,
+				crop_to_aspect_ratio=False,
+				# class_mode='sparse'
+			)
 
 		self.log.info("Data loaded and batched")
 
@@ -178,6 +223,8 @@ class MAGIST_CNN():
 
 	def compile_model(self):
 		"""Compiles the model.
+
+		:return: The compiled model.
 		"""
 		self.model = _CNN()
 
@@ -199,6 +246,8 @@ class MAGIST_CNN():
 
 	def callbacks_init(self):
 		"""Initializes the callbacks.
+
+		:return: The configured callbacks.
 		"""
 		self.current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 		self.train_log_dir = f'{self.TensorBoard_log_dir}/train_logs/gradient_tape/' + self.current_time + '/train'
@@ -224,9 +273,9 @@ class MAGIST_CNN():
 
 		self.ckpt.restore(self.manager.latest_checkpoint)
 		if self.manager.latest_checkpoint:
-			self.log("Restored from {}".format(self.manager.latest_checkpoint))
+			self.log.info("Restored from {}".format(self.manager.latest_checkpoint))
 		else:
-			self.log("Initializing from scratch.")
+			self.log.info("Initializing from scratch.")
 
 		return self.ckpt, self.manager, self.callbacks
 
@@ -254,7 +303,8 @@ class MAGIST_CNN():
 		self.test_accuracy(labels, predictions)
 
 	def train(self):
-		"""Trains the model."""
+		"""Trains the model and exports training data.
+		"""
 		self.callbacks.on_train_begin()
 		self.log.info("Training started successfully.")
 		for epoch in (pbar_epoch := tqdm(range(self.epochs), ascii="░▒█")):
@@ -317,7 +367,10 @@ class MAGIST_CNN():
 			self.log.info("Model exported to {}.".format(self.export_path))
 
 	def get_class_names(self):
-		"""Returns the class names."""
+		"""Returns the class names.
+
+		:return: List of class names.
+		"""
 		if self.train_ds is None or self.val_ds is None:
 			self.log.error("Dataset not loaded! Please load dataset first using 'class.load_data()'.")
 			return None
@@ -329,9 +382,29 @@ class MAGIST_CNN():
 			self.log.error("Class names do not match between train and test datasets. Please check your text_ds.")
 			return None
 
+	def __call__(self):
+		"""Calls the train method."""
+		self.log.info("Automated Trainer --> Loading data...")
+		train, test = self.load_data()
+		self.log.info("Automated Trainer --> Data loaded successfully.")
+		self.log.info("Automated Trainer --> Building model...")
+		self.compile_model()
+		self.log.info("Automated Trainer --> Model built successfully.")
+		self.log.info("Automated Trainer --> Setting up callbacks...")
+		self.callbacks_init()
+		self.log.info("Automated Trainer --> Callbacks setup successfully.")
+		self.log.info("Automated Trainer --> Training model...")
+		self.train()
+		self.log.info("Automated Trainer --> Training completed successfully.")
+
+
 
 class MAGIST_CNN_Predictor():
 	def __init__(self, config):
+		"""Initializes the predictor and config.
+
+		:param config: A dictionary containing the config.json.
+		"""
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("MAGIST_Lite_Predictor")  # Create a script specific logging instance
 
@@ -347,6 +420,14 @@ class MAGIST_CNN_Predictor():
 				pass
 			try:
 				self.export_path = i["export_full_model"]
+			except KeyError:
+				pass
+			try:
+				self.input_image_size = i["input_image_size"]
+			except KeyError:
+				pass
+			try:
+				self.grayscale = i["grayscale"]
 			except KeyError:
 				pass
 
@@ -370,10 +451,15 @@ class MAGIST_CNN_Predictor():
 		"""Loads a file from the given filename.
 
 		:param filename: The filename to load.
+
+		:return: The loaded image file as np.array.
 		"""
 		np_image = Image.open(filename)
 		np_image = np.array(np_image).astype('float32') / 255
-		np_image = transform.resize(np_image, (28, 28, 3))
+		if self.grayscale:
+			np_image = transform.resize(np_image, (self.input_image_size[0], self.input_image_size[1], 1))
+		else:
+			np_image = transform.resize(np_image, (self.input_image_size[0], self.input_image_size[1], 3))
 		np_image = np.expand_dims(np_image, axis=0)
 		return np_image
 
@@ -381,6 +467,8 @@ class MAGIST_CNN_Predictor():
 		"""Predicts the class of the given image.
 
 		:param img_path: The path to the image.
+
+		:return: The softmax array of predictions and the id of the prediction from class names.
 		"""
 		img_path = pathlib.Path(img_path)
 		img_path = img_path.resolve()  # Find absolute path from a relative one.
@@ -400,6 +488,8 @@ class MAGIST_CNN_Predictor():
 		"""Predicts the class of the given batch of images.
 
 		:param in_batch_ds: The batch of images.
+
+		:return: The softmax array of predictions and the id of the prediction from class names.
 		"""
 		test_ds = in_batch_ds
 

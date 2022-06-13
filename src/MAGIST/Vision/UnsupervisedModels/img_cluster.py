@@ -8,7 +8,7 @@ from skimage.io import imread, imshow, imsave
 from skimage.transform import resize
 from sklearn.cluster import KMeans
 from skimage.util import img_as_uint
-from ..LogMaster.log_init import MainLogger
+from ...Utils.LogMaster.log_init import MainLogger
 import pathlib, json
 
 
