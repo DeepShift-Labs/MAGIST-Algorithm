@@ -43,7 +43,7 @@ def group_audio_video_sync(image_in_dir, img_rescale, audio_in, fps):
   video1 = np.array(video1)
   audio1 = np.array(audio1)
 
-  np.savez("data.npz", audio=audio1, video=video1)
+  np.savez("text_ds.npz", audio=audio1, video=video1)
 
   return audio1, video1
 
@@ -58,7 +58,7 @@ def data_to_wave(data):
 
 # print(len(audio[0])*len(video))
 
-npzfile = np.load("data.npz")
+npzfile = np.load("text_ds.npz")
 audio = npzfile['audio']
 video = npzfile['video']
 # print(npzfile.files)

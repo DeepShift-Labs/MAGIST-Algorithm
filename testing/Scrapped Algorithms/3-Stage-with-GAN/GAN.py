@@ -19,11 +19,11 @@ from IPython import display
 BUFFER_SIZE = 60000
 BATCH_SIZE = 256
 
-# # Batch and shuffle the data
-# train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+# # Batch and shuffle the text_ds
+# train_dataset = tf.text_ds.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 #
 
-npzfile = np.load("data.npz")
+npzfile = np.load("text_ds.npz")
 audio = npzfile['audio']
 video = npzfile['video']
 
