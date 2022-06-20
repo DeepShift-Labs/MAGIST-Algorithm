@@ -42,7 +42,11 @@ class MainLogger():
         else:
             logger.setLevel(logging.DEBUG)
         # create file handler which logs even debug messages
-        fh = logging.FileHandler(os.path.join(self.log_dir, 'complete.log'))
+        try:
+            fh = logging.FileHandler(os.path.join(self.log_dir, 'complete.log'))
+        except FileNotFoundError:
+            os.makedirs(self.log_dir)
+            fh = logging.FileHandler(os.path.join(self.log_dir, 'complete.log'))
 
         # create console handler with a higher log level
         error = logging.StreamHandler()
