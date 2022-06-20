@@ -32,7 +32,7 @@ use a Transformer chatbot to listen to conversations and simultaneously train on
 ***
 
 ## Usage
-This project is still under development. Please contact me at [deepshiftlabs@outlook.com]() if you want immediate access 
+This project is still under development. Please contact me at [krishna.shah@deepshift.dev]() if you want immediate access 
 to MAGIST. Once the algorithm is in a stable state, I will release a Python Package on PYPI and Github for access. There 
 will also be a wiki with more instructions.
 
