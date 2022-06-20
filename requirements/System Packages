@@ -1,0 +1,6 @@
+sudo apt-get install python3-pyaudio
+sudo apt-get install libasound-dev
+conda install pyaudio
+pip install pocketsphinx
+sudo apt-get install libpulse-dev
+sudo apt install pocketsphinx
