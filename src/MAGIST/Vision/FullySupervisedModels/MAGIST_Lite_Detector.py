@@ -398,7 +398,6 @@ class MAGIST_CNN():
 		self.log.info("Automated Trainer --> Training completed successfully.")
 
 
-
 class MAGIST_CNN_Predictor():
 	def __init__(self, config):
 		"""Initializes the predictor and config.
