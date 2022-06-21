@@ -32,7 +32,7 @@ use a Transformer chatbot to listen to conversations and simultaneously train on
 ***
 
 ## Usage
-This project is still under development. Please contact me at [deepshiftlabs@outlook.com]() if you want immediate access 
+This project is still under development. Please contact me at [krishna.shah@deepshift.dev]() if you want immediate access 
 to MAGIST. Once the algorithm is in a stable state, I will release a Python Package on PYPI and Github for access. There 
 will also be a wiki with more instructions.
 
@@ -90,6 +90,10 @@ pip3 install -r requirments.txt
 ## Contributing
 Your contribution, monetary or programmatically, is crucial for the rapid development of the algorithm and its training. 
 Please consider contributing. Even the smallest change to my README will be greatly appreciated.
+
+### Project Zeta
+We are building a fully biomimetic robot dog to implement MAGIST into. This will serve as the gateway between the AI and the physical world. 
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=DeepShift-Labs&repo=Project-Zeta)](https://github.com/DeepShift-Labs/Project-Zeta)
 
 ***
 
