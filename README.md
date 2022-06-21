@@ -91,6 +91,10 @@ pip3 install -r requirments.txt
 Your contribution, monetary or programmatically, is crucial for the rapid development of the algorithm and its training. 
 Please consider contributing. Even the smallest change to my README will be greatly appreciated.
 
+### Project Zeta
+We are building a fully biomimetic robot dog to implement MAGIST into. This will serve as the gateway between the AI and the physical world. 
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=DeepShift-Labs&repo=Project-Zeta)](https://github.com/DeepShift-Labs/Project-Zeta)
+
 ***
 
 # Disclaimer
