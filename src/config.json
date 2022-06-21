@@ -5,6 +5,9 @@
       {"project_cx": "***"}
     ]}
   ],
+  "system_administration": [
+    {"sudo_password": "***"}
+  ],
   "paths": [
     {"log_dir": "PATH/TO/Logs"}
   ],
@@ -16,12 +19,15 @@
     {"data_path": "PATH/TO/Data"},
     {"TensorBoard_log_dir": "PATH/TO/TensorBoard"},
     {"TF_ckpt_path": "PATH/TO/tf_ckpt"},
-    {"input_image_size": [PXL_WIDTH, PXL_HEIGHT]},
+    {"input_image_size": [IMG_PXL_WIDTH, IMG_PXL_HEIGHT]},
     {"grayscale": BINARY},
     {"epochs": INT},
     {"batch_size": INT},
     {"seed": INT},
     {"validation_split":  FLOAT},
     {"export_full_model": "PATH/TO/Full_TF_Model"}
+  ],
+  "neural_db": [
+    {"mongo_socket": MONGO_URL<mongodb://localhost:27017/>}
   ]
 }
