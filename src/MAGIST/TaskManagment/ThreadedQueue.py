@@ -86,10 +86,9 @@ class MainPriorityQueue():
 		self.log.info("Thread created and daemonized. Queue started...")
 
 	def join_thread(self):
-		"""Join the queue and quit.
+		"""Join the queue thread with main.
 		"""
 
-		self.q.join()
 		self.log.info("Attempting to join main thread...")
 		self.q.join()
 		self.log.info("Queue merge finished.")
