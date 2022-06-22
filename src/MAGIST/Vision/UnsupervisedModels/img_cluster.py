@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from skimage.io import imread, imshow, imsave
 from skimage.transform import resize
 from sklearn.cluster import KMeans
-from skimage.util import img_as_uint
+from skimage.util import img_as_uint, img_as_ubyte
 from ...Utils.LogMaster.log_init import MainLogger
 import pathlib, json
 
@@ -47,7 +47,8 @@ class RoughCluster():
 			"""
 
 			:param image: Location of input image.
-			:return: Pandas Dataframe consisting of the image.
+
+			:return: Array of masked image locations.
 			"""
 			df = pd.DataFrame([image[:, :, 0].flatten(),
 			                   image[:, :, 1].flatten(),
@@ -82,19 +83,25 @@ class RoughCluster():
 			plt.show()
 
 		fig, axes = plt.subplots(1,n_of_clusters, figsize=(15, 12))
+
+		clustered_img = []
+
 		for n, ax in enumerate(axes.flatten()):
 			img2 = imread(img_location)
 			img2 = resize(img2, img_size)
 			img2[:, :, 0] = img2[:, :, 0]*(result==[n]) # Disabling pixels of certain type
 			img2[:, :, 1] = img2[:, :, 1]*(result==[n]) # Disabling pixels of certain type
 			img2[:, :, 2] = img2[:, :, 2]*(result==[n]) # Disabling pixels of certain type
-			unit_img = img_as_uint(img2)
+			unit_img = img_as_ubyte(img2)
 			imsave(f'{masked_img_dir}/masked{n}.jpg', unit_img)
+			clustered_img.append(f'{masked_img_dir}/masked{n}.jpg')
 			ax.imshow(img2);
 			ax.set_axis_off()
 		fig.tight_layout()
 		if(self.matplot):
 			plt.show()
+
+		return clustered_img
 
 
 # unsupervised_clusters(3, 'test.jpg', (540, 480), "./Masks")
