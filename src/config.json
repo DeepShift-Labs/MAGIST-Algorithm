@@ -29,5 +29,6 @@
   ],
   "neural_db": [
     {"mongo_socket": MONGO_URL<mongodb://localhost:27017/>}
+    {"db_search_zone": ["vision", "nlp", "common"]}
   ]
 }

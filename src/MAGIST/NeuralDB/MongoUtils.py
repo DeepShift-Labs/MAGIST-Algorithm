@@ -1,9 +1,25 @@
-import os, pathlib, json
+"""Mongo Utils file that manages and initializes the MongoDB connection.
+
+This file contains the main Admin functions and the rest is done using the PrimaryNeuralDB file.
+"""
+
+import json
+import os
+import pathlib
+
 import pymongo as mongo
+
 from ..Utils.LogMaster.log_init import MainLogger
 
+
 class AdminUtils():
+	"""Class that manages the MongoDB connection."""
+
 	def __init__(self, config):
+		"""Initialize the AdminUtils class.
+
+		:param config: The config file(string).
+		"""
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("MongoAdminUtils")  # Create a script specific logging instance
 
@@ -27,6 +43,11 @@ class AdminUtils():
 				pass
 
 	def initialize_neuraldb(self):
+		"""Initialize the MongoDB connection.
+
+		:return: The MongoDB client.
+		"""
+
 		command = 'systemctl start mongod'
 		p = os.system('echo %s|sudo -S %s' % (self.passcode, command))
 		self.log.info("NeuralDB Launched Successfully! Attempting to connect to local socket...")
@@ -42,12 +63,18 @@ class AdminUtils():
 		return self.db_client
 
 	def stop_db(self):
+		"""Stop the MongoDB connection.
+		"""
+
 		self.log.info("Shutting down MongoDB Neural Database! Standby...")
 		command = 'systemctl stop mongod'
 		p = os.system('echo %s|sudo -S %s' % (self.passcode, command))
 		self.log.info("NeuralDB Closed Successfully!")
 
 	def restart_db(self):
+		"""Restart the MongoDB connection.
+		"""
+
 		self.log.info("Restarting MongoDB Neural Database! Standby...")
 
 		command = 'systemctl restart mongod'
@@ -63,5 +90,3 @@ class AdminUtils():
 			               "something like this: mongodb://localhost:27017/")
 
 		return self.db_client
-
-
