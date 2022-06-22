@@ -11,8 +11,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from google_images_search import GoogleImagesSearch
-from tqdm import tqdm
-import pathlib, json, sys
+import os
+import pathlib, json
 from googleapiclient.errors import HttpError
 
 from ..LogMaster.log_init import MainLogger
@@ -34,25 +34,6 @@ class GoogleScraper:
 		info: https://stackoverflow.com/questions/6562125/getting-a-cx-id-for-custom-search-google-api-python &
 		https://pypi.org/project/Google-Images-Search/
 		"""
-
-		def my_progressbar(url, progress):
-			"""Defines custom progressbar to visualize the download process for the image downloader.
-
-			:param url: The URL from which the downloader is currently downloading the image from.
-			:param progress: The percentage of progress in downloading the file.
-			:return: None
-			"""
-			print(url + ' ' + str(progress) + '%')
-			# t = tqdm(total=100, desc=url)
-			# t.update(progress)
-
-		# try:
-		#     if(progress == 1):
-		#         t = tqdm(total=100, desc=url)
-		#     else:
-		#         t.update(progress)
-		# except:
-		#     pass
 
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("GoogleScraper")  # Create a script specific logging instance
@@ -81,23 +62,25 @@ class GoogleScraper:
 			except KeyError:
 				pass
 
+	def __my_progressbar(self, url, progress):
+		"""Defines custom progressbar to visualize the download process for the image downloader.
 
-		try:
-			if self.GIS_verbose == 1:
-				self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=my_progressbar, validate_images=True)
-			if self.GIS_verbose == 0:
-				self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, validate_images=True)
-			# Authenticate Google Image Search
-			self.log.info("Google Image Search initialized and authorized successfully.")
-			self.log.warning("Google API Authentication verification is currently non-functional. If some functionality "
-			                 "regarding Google APIs fails, your API key and Project CX token are likely incorrect.")
-		except HttpError:
-			self.log.error("Google Image Search failed to initialize. Perhaps your authentication information in the "
-			               "designated config file is erroneous.")
-			self.log.info("""The CX ID is hard to find. To find it, first go to: http://www.google.com/cse/manage/all. Select your
-		project and the ID will be called: "Search engine ID". Go to this StackOverflow question and PyPi Post for more
-		info: https://stackoverflow.com/questions/6562125/getting-a-cx-id-for-custom-search-google-api-python &
-		https://pypi.org/project/Google-Images-Search/""")
+		:param url: The URL from which the downloader is currently downloading the image from.
+		:param progress: The percentage of progress in downloading the file.
+		:return: None
+		"""
+		print(url + ' ' + str(progress) + '%')
+
+		# t = tqdm(total=100, desc=url)
+		# t.update(progress)
+
+		# try:
+		#     if(progress == 1):
+		#         t = tqdm(total=100, desc=url)
+		#     else:
+		#         t.update(progress)
+		# except:
+		#     pass
 
 	def reverse_image_search(self, image_path):
 		"""Takes a given image path and finds the object name using Google Reverse Image Search and scraping.
@@ -129,15 +112,19 @@ class GoogleScraper:
 		nav.get(fetchUrl)
 		self.log.info("Selenium reverse search complete.")
 
-		soup = BeautifulSoup(nav.page_source, 'html.parser')
-		link = soup.find_all("a", {"class": "fKDtNb"})[0]
-		link = str(link)
-		start = link.find(">") + len(">")
-		end = link.find("</")
-		substring = link[start:end]
-		self.log.info("Web scraping complete.")
-		self.log.info(f"Found '{substring}' class in input image.")
-		return substring
+		try:
+			soup = BeautifulSoup(nav.page_source, 'html.parser')
+			link = soup.find_all("a", {"class": "fKDtNb"})[0]
+			link = str(link)
+			start = link.find(">") + len(">")
+			end = link.find("</")
+			substring = link[start:end]
+			self.log.info("Web scraping complete.")
+			self.log.info(f"Found '{substring}' class in input image.")
+			nav.quit()
+			return substring
+		except IndexError:
+			self.log.warning("No object name found in input image.")
 
 	def download_raw_img_dataset(self, keyword, quantity, download_location):
 		"""Takes a keyword and downloads images of that object from Google Images.
@@ -147,6 +134,23 @@ class GoogleScraper:
 		:param download_location: Path the user wants to download the images into. This can be relative or absolute.
 		:return: True if succeeded.
 		"""
+
+		try:
+			if self.GIS_verbose == 1:
+				self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=self.__my_progressbar, validate_images=True)
+			if self.GIS_verbose == 0:
+				self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, validate_images=True)
+			# Authenticate Google Image Search
+			self.log.info("Google Image Search initialized and authorized successfully.")
+			self.log.warning("Google API Authentication verification is currently non-functional. If some functionality "
+			                 "regarding Google APIs fails, your API key and Project CX token are likely incorrect.")
+		except HttpError:
+			self.log.error("Google Image Search failed to initialize. Perhaps your authentication information in the "
+			               "designated config file is erroneous.")
+			self.log.info("""The CX ID is hard to find. To find it, first go to: http://www.google.com/cse/manage/all. Select your
+		project and the ID will be called: "Search engine ID". Go to this StackOverflow question and PyPi Post for more
+		info: https://stackoverflow.com/questions/6562125/getting-a-cx-id-for-custom-search-google-api-python &
+		https://pypi.org/project/Google-Images-Search/""")
 
 		_search_params = {
 			'q': keyword,
@@ -165,11 +169,15 @@ class GoogleScraper:
 		filePath = filePath.resolve()  # Find the absolute path from relative one.
 		filePath = str(filePath)
 
-		self.log.info(f"Initiating Google Image Search for key term: {keyword}.")
+		filePath = os.path.join(filePath, keyword)
+
+		self.log.info(f"Initiating Google Image Search for key term: {keyword}. Will download {quantity} images to {filePath}.")
+
+		os.makedirs(filePath, exist_ok=True)
 
 		try:
 			self.gis.search(search_params=_search_params,
-		                path_to_dir=download_location)  # Search and download images. Note:
+		                path_to_dir=filePath)  # Search and download images. Note:
 		except HttpError as e:
 			self.log.warning(f"Google Image Search failed to complete. Retrying with next page. Error: {e}")
 			self.gis.next_page(search_again=True)
