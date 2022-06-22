@@ -74,11 +74,19 @@ class GoogleScraper:
 						self.project_cx_id = j["project_cx"]
 					except KeyError:
 						pass
+					try:
+						self.GIS_verbose = j["GIS_downloader_verbose"]
+					except KeyError:
+						pass
 			except KeyError:
 				pass
 
+
 		try:
-			self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=my_progressbar, validate_images=True)
+			if self.GIS_verbose == 1:
+				self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, progressbar_fn=my_progressbar, validate_images=True)
+			if self.GIS_verbose == 0:
+				self.gis = GoogleImagesSearch(self.dev_api_key, self.project_cx_id, validate_images=True)
 			# Authenticate Google Image Search
 			self.log.info("Google Image Search initialized and authorized successfully.")
 			self.log.warning("Google API Authentication verification is currently non-functional. If some functionality "
