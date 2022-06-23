@@ -93,7 +93,11 @@ class RoughCluster():
 			img2[:, :, 1] = img2[:, :, 1]*(result==[n]) # Disabling pixels of certain type
 			img2[:, :, 2] = img2[:, :, 2]*(result==[n]) # Disabling pixels of certain type
 			unit_img = img_as_ubyte(img2)
-			imsave(f'{masked_img_dir}/masked{n}.jpg', unit_img)
+			try:
+				imsave(f'{masked_img_dir}/masked{n}.jpg', unit_img)
+			except FileNotFoundError:
+				pathlib.Path(masked_img_dir).mkdir(parents=True, exist_ok=True)
+				imsave(f'{masked_img_dir}/masked{n}.jpg', unit_img)
 			clustered_img.append(f'{masked_img_dir}/masked{n}.jpg')
 			ax.imshow(img2);
 			ax.set_axis_off()
