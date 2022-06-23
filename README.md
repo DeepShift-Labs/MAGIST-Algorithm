@@ -48,7 +48,7 @@ systems may have errors that will require debugging.***
 ### Linux (Ubuntu-based Systems)
 First install `Python 3` and `pip`:
 ```commandline
-sudo apt python3 python3-dev python3-pip
+sudo apt install python3 python3-dev python3-pip
 ```
 Next, we need to install Firefox and its corresponding `geckodriver` for headless Selenium searches:
 ```commandline
