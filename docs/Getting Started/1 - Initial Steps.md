@@ -24,8 +24,10 @@ Replicating this environment is crucial for stability and performance.
 
 ## Complete Installation Guide
 
-This project has many dependencies. Most can be installed using `pip`. Some require OS-level package managers. This is 
-going to work best in Linux-based systems.
+This project has many dependencies. Most can be installed using `pip`. Some require OS-level package managers. 
+
+***These instruction are for Linux-based systems. In particular for Ubuntu 20.04 LTS based operating systems. Other 
+systems may have errors that will require debugging.***
 
 ### Linux (Ubuntu-based Systems)
 First install `Python 3` and `pip`:
@@ -77,7 +79,13 @@ sudo apt install mongodb-org
 Next, create a Python environment. There are 2 ways to do this: Anaconda or VEnv.
 
 #### Anaconda
-First install Anaconda from https://www.anaconda.com/.
+First install Anaconda from https://www.anaconda.com/. You will need to download the latest installer and then run the following commands:
+```commandline
+sudo chmod +x Anaconda3-xxxx.xx-Linux-x86_64.sh
+./Anaconda3-xxxx.xx-Linux-x86_64.sh
+```
+
+Close and reopen **all** terminal windows.
 
 Make the Anaconda environment:
 ```commandline
