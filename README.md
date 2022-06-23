@@ -85,6 +85,8 @@ Activate the environment in your current console. Note: You will have to do this
 ```commandline
 conda activate myenv
 ```
+Get the latest MAGIST Wheel from our [releases page](https://github.com/DeepShift-Labs/MAGIST-Algorithm/releases)!
+
 Install MAGIST:
 ```commandline
 pip3 install MAGIST-Algorithm-x.x.x-py3-none-any.whl
@@ -99,6 +101,8 @@ To activate it, you must travel to that `path/bin/` and then run:
 ```commandline
 source activate
 ```
+Get the latest MAGIST Wheel from our [releases page](https://github.com/DeepShift-Labs/MAGIST-Algorithm/releases)!
+
 Install MAGIST:
 ```commandline
 pip3 install MAGIST-Algorithm-x.x.x-py3-none-any.whl
