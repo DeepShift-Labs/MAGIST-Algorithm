@@ -23,18 +23,29 @@ models are allowed, here is the process to follow:
 1. K-Means Clustering(find key objects in image) -> Discriminator for integrity check(see if clustering was performed well)
 2. Reverse Image Search and Google Scraping(find label of image) -> Data Downloader(find dataset from large datasets)
 3. Transfer Learn Model -> Object Detector
+4. Get summary from internet sources like Wikipedia; location from LiDAR(future); user from facial detection(future); etc.
+5. Store all the data in the NeuralDB
 ```
 
 ### Natural Language Processing
-Another key stage of this AGI(Artificial General Intelligence) is the huaman interaction and understanding. MAGIST will 
-use a Transformer chatbot to listen to conversations and simultaneously train on them. When it is queried, it will collect information from the database, and use the transformer to fit a response. This will be done by using a GAN system infused into the transformer. The transformer will act as the discriminator to perform an integrity check. 
+Another key stage of this AGI(Artificial General Intelligence) is the huaman interaction and understanding. MAGIST will constantly listen to conversations and make intelligent decisions. Here is the target process:
+
+```
+1. Record audio data and transcribe it(this is ***the only*** place where a pretrained model(the transcriber) is used since learning a human language fully unsupervised is incredibly arduous.
+2. Use a custom positional embedding with a Self-Attention head to find key words.
+3. Search these terms in the NeuralDB for possible entries.
+4. Search unknown terms online and store defenitions for future reference. (future)
+5. Extract key terms from matching entries. (future)
+6. Insert those key terms to a text transformer trained on the collected NeuralDB data to generate a prediction. (future)
+7. Utter the prediction. (future)
+```
 
 ***
 
 ## Usage
-This project is still under development. Please contact me at [krishna.shah@deepshift.dev]() if you want immediate access 
+This project is still under development. Please contact me at [krishna.shah@deepshift.dev]() if you want immediate access and/or support
 to MAGIST. Once the algorithm is in a stable state, I will release a Python Package on PYPI and Github for access. There 
-will also be a wiki with more instructions.
+will also be documentation with more instructions.
 
 ***
 
