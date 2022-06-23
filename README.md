@@ -42,6 +42,9 @@ will also be a wiki with more instructions.
 This project has many dependencies. Most can be installed using `pip`. Some require OS-level package managers. This is 
 going to work best in Linux-based systems.
 
+***These instruction are for Linux-based systems. In particular for Ubuntu 20.04 LTS based operating systems. Other 
+systems may have errors that will require debugging.***
+
 ### Linux (Ubuntu-based Systems)
 First install `Python 3` and `pip`:
 ```commandline
@@ -49,8 +52,26 @@ sudo apt python3 python3-dev python3-pip
 ```
 Next, we need to install Firefox and its corresponding `geckodriver` for headless Selenium searches:
 ```commandline
-sudo apt install firefox firefox-geckodriver
+sudo apt install firefox
 ```
+
+**Note:** If you get an error regarding the geckodriver, you can install it manually by following the instructions 
+[here](https://github.com/mozilla/geckodriver).
+
+#### Install System Packages
+Next, we need to install the system packages that MAGIST uses. 
+```commandline
+sudo apt install python3-pyaudio
+sudo apt install libasound-dev
+```
+
+#### MongoDB
+Next, we need to install MongoDB. This is a database that MAGIST uses to store its data. Please go to the 
+[MongoDB Website](https://www.mongodb.com/) and follow the instructions to install it. We have more instructions in the 
+[documentation](https://github.com/DeepShift-Labs/MAGIST-Algorithm/tree/main/docs).
+
+
+
 Next, create a Python environment. There are 2 ways to do this: Anaconda or VEnv.
 
 #### Anaconda
@@ -64,9 +85,9 @@ Activate the environment in your current console. Note: You will have to do this
 ```commandline
 conda activate myenv
 ```
-Install all the packages.
+Install MAGIST:
 ```commandline
-pip3 install -r requirments.txt
+pip3 install MAGIST-Algorithm-x.x.x-py3-none-any.whl
 ```
 
 #### VEnv
@@ -78,9 +99,9 @@ To activate it, you must travel to that `path/bin/` and then run:
 ```commandline
 source activate
 ```
-Install all the packages.
+Install MAGIST:
 ```commandline
-pip3 install -r requirments.txt
+pip3 install MAGIST-Algorithm-x.x.x-py3-none-any.whl
 ```
 
 **Congratulations! You are all setup to script and use MAGIST**
