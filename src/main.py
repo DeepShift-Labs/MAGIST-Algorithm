@@ -17,7 +17,7 @@ for i in imgs:
 	label = scraper.reverse_image_search(i)
 	labels.append(label)
 
-print(labels)
+labels = np.unique(np.array(labels))
 
 from MAGIST.TaskManagment.ThreadedQueue import MainPriorityQueue
 
