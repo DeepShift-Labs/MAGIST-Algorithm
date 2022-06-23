@@ -210,9 +210,9 @@ class TextPreprocessing():
 				stat = "Not"
 			if show_only_important:
 				if attention_weights[i] >= threshold:
-					print(f"{attention_weights[i]:.2f}, {self.vectorize_layer.get_vocabulary()[vectorized_text[i]]}, {stat}")
+					self.log.info(f"{attention_weights[i]:.2f}, {self.vectorize_layer.get_vocabulary()[vectorized_text[i]]}, {stat}")
 			else:
-				print(
+				self.log.info(
 					f"{attention_weights[i]:.2f}, {self.vectorize_layer.get_vocabulary()[vectorized_text[i]]}, {stat}")
 
 	def __call__(self, input_text):

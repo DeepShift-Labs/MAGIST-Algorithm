@@ -116,7 +116,6 @@ class MainPriorityQueue():
 		"""
 
 		r = self.function_returns
-		print(r)
 		r = np.array(r)
 		r = r[r[:, 0] == query]
 		r = np.squeeze(r)

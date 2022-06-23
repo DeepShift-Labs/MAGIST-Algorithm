@@ -69,7 +69,7 @@ class GoogleScraper:
 		:param progress: The percentage of progress in downloading the file.
 		:return: None
 		"""
-		print(url + ' ' + str(progress) + '%')
+		self.log.info(url + ' ' + str(progress) + '%')
 
 		# t = tqdm(total=100, desc=url)
 		# t.update(progress)

@@ -61,11 +61,11 @@ class ImageSlicer:
 
 			except (FileNotFoundError, UnidentifiedImageError, ValueError) as error:
 				if error == UnidentifiedImageError:
-					print("Unidentified image: {}".format(image_path))
+					self.log.warning("Unidentified image: {}".format(image_path))
 				if error == FileNotFoundError:
-					print("Image Not Found: {}".format(image_path))
+					self.log.warning("Image Not Found: {}".format(image_path))
 				if error == ValueError:
-					print("Image Type Not Supported: {}".format(image_path))
+					self.log.warning("Image Type Not Supported: {}".format(image_path))
 
 		self.log.info("Resized {} files in {}".format(counter, base_path))
 

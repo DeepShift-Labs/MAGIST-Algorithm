@@ -339,7 +339,7 @@ class MAGIST_CNN():
 
 			if ((int(self.ckpt.step) - 1) % self.batch_size) == 0:
 				save_path = self.manager.save()
-				print("Saved checkpoint for step {}: {}".format(int(self.ckpt.step) - 1, save_path))
+				self.log.info("Saved checkpoint for step {}: {}".format(int(self.ckpt.step) - 1, save_path))
 
 			self.epoch_arr.append(epoch + 1)
 			self.train_loss_arr.append(self.train_loss.result())
@@ -355,7 +355,7 @@ class MAGIST_CNN():
 		self.callbacks.on_train_end()
 
 		for i in range(len(self.epoch_arr)):
-			print(
+			self.log.info(
 				f'Epoch {self.epoch_arr[i]}, '
 				f'Loss: {self.train_loss_arr[i]}, '
 				f'Accuracy: {self.train_accuracy_arr[i]}, '
