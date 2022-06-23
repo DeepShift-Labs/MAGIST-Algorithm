@@ -9,6 +9,9 @@
   "system_administration": [
     {"sudo_password": "***"}
   ],
+  "task_management": [
+    {"num_of_worker_threads": INT}
+  ],
   "paths": [
     {"log_dir": "PATH/TO/Logs"}
   ],
