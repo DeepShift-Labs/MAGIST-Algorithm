@@ -3,7 +3,7 @@
     {"google": [
       {"api_key": "***"},
       {"project_cx": "***"}
-      {"GIS_downloader_verbose": 0}
+      {"GIS_downloader_verbose": BINARY}
     ]}
   ],
   "system_administration": [
