@@ -19,10 +19,6 @@ class GoogleAudioTranscriber():
 		:param config: The config file(config.json).
 		"""
 
-		self.log = MainLogger(config).StandardLogger("GoogleAudioTranscriber")
-		self.r = sr.Recognizer()
-		self.m = sr.Microphone()
-
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("GoogleAudioTranscriber")  # Create a script specific logging instance
 
@@ -33,6 +29,9 @@ class GoogleAudioTranscriber():
 
 		:return: The transcription of the audio as a string.
 		"""
+
+		self.r = sr.Recognizer()
+		self.m = sr.Microphone()
 
 		with self.m as source:
 			self.log.info("GoogleAudioTranscriber Listening...")
@@ -56,6 +55,10 @@ class GoogleAudioTranscriber():
 
 		:return: The transcription of the audio as a string.
 		"""
+
+		self.r = sr.Recognizer()
+		self.m = sr.Microphone()
+
 		file = pathlib.Path(file)
 		file = file.resolve()  # Find absolute path from a relative one.
 		file = str(file)
@@ -77,5 +80,3 @@ class GoogleAudioTranscriber():
 			self.log.info("Time taken: " + str(end - start))
 
 		return transcription
-
-

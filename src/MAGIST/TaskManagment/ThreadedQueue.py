@@ -7,6 +7,8 @@ import queue
 import threading
 import uuid
 import numpy as np
+import pathlib
+import json
 
 from ..Utils.LogMaster.log_init import MainLogger
 
@@ -26,6 +28,17 @@ class MainPriorityQueue():
 		self.log = root_log.StandardLogger("QueueController")  # Create a script specific logging instance
 
 		self.function_returns = []
+
+		config = pathlib.Path(config)
+		config = config.resolve()  # Find absolute path from a relative one.
+		f = open(config)
+		config = json.load(f)
+
+		for i in config['task_management']:
+			try:
+				self.worker_threads = i["num_of_worker_threads"]
+			except KeyError:
+				pass
 
 	def __worker(self):
 		"""The worker thread. This actually executes the tasks in the queue.
@@ -82,7 +95,8 @@ class MainPriorityQueue():
 		"""
 
 		# Turn-on the worker thread.
-		threading.Thread(target=self.__worker, daemon=True).start()
+		for i in range(self.worker_threads):
+			threading.Thread(target=self.__worker, daemon=True).start()
 		self.log.info("Thread created and daemonized. Queue started...")
 
 	def join_thread(self):

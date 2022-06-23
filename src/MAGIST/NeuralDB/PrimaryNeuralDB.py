@@ -7,6 +7,7 @@ request. This requires the instantiated client from MongoUtils.
 import json
 import pathlib
 import time
+import re
 
 from ..Utils.LogMaster.log_init import MainLogger
 
@@ -34,7 +35,6 @@ class NeuralDB():
 				self.db_string = i["db_search_zone"]
 			except KeyError:
 				pass
-		print(self.db_string)
 
 	def recreate_db(self):
 		"""Recreate the databases and collections
@@ -47,6 +47,8 @@ class NeuralDB():
 			time.sleep(1)
 		self.log.warning("Resetting and recreating all databases and tables...")
 
+		self.dbs = []
+
 		for d in self.db_string:
 			if d == "vision":
 				self.vision = self.client['VisionDB']
@@ -57,6 +59,8 @@ class NeuralDB():
 				self.obj_users = self.vision["ObjectUsers"]
 
 				self.log.info("Vision database is included in NeuralDB search.")
+
+				self.dbs.append(self.vision)
 			if d == "nlp":
 				self.nlp = self.client["NLP"]
 
@@ -64,12 +68,16 @@ class NeuralDB():
 				self.word_location = self.nlp["WordLocation"]
 
 				self.log.info("NLP database is included in NeuralDB search.")
+
+				self.dbs.append(self.nlp)
 			if d == "common":
 				self.common = self.client["Common"]
 
 				self.word_obj_relation = self.common["WordObjectRelation"]
 
 				self.log.info("Common database is included in NeuralDB search.")
+
+				self.dbs.append(self.common)
 
 		try:
 			if self.vision is None:
@@ -169,7 +177,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"obj_name": {"$regex": obj_name}}):
+				for j in self.vision[i].find({"obj_name": re.compile(rf"\b{obj_name}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -190,7 +198,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"obj_desc" : {"$regex" : keyword}}):
+				for j in self.vision[i].find({"obj_desc" : re.compile(rf"\b{keyword}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -211,7 +219,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"obj_location" : {"$regex" : location}}):
+				for j in self.vision[i].find({"obj_location" : re.compile(rf"\b{location}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -232,7 +240,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"user_name" : {"$regex" : user}}):
+				for j in self.vision[i].find({"user_name" : re.compile(rf"\b{user}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -257,7 +265,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"word_name" : {"$regex" : word}}):
+				for j in self.vision[i].find({"word_name" : re.compile(rf"\b{word}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -278,7 +286,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"word_desc" : {"$regex" : keyword}}):
+				for j in self.vision[i].find({"word_desc" : re.compile(rf"\b{keyword}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -299,7 +307,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"word_location" : {"$regex" : location}}):
+				for j in self.vision[i].find({"word_location" : re.compile(rf"\b{location}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
@@ -320,8 +328,7 @@ class NeuralDB():
 
 			for i in d.list_collection_names():
 				self.log.info(f"    ===> Collection: {i}")
-				for j in self.vision[i].find({"word_relation" : {"$regex" : relation}}):
+				for j in self.vision[i].find({"word_relation" : re.compile(rf"\b{relation}\b", re.IGNORECASE)}):
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
-
