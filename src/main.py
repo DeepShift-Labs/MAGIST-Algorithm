@@ -99,4 +99,4 @@ for i in selected:
 search_res = np.array(search_res)
 search_res = np.squeeze(search_res)
 
-print(search_res[0][3])
+print(search_res[0]["obj_desc"])
