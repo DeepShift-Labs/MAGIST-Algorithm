@@ -32,7 +32,7 @@
     {"export_full_model": "PATH/TO/Full_TF_Model"}
   ],
   "neural_db": [
-    {"mongo_socket": MONGO_URL<mongodb://localhost:27017/>}
+    {"mongo_socket": MONGO_URL<mongodb://localhost:27017/>},
     {"db_search_zone": ["vision", "nlp", "common"]}
   ]
 }
