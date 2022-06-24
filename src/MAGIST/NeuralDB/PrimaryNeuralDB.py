@@ -48,6 +48,7 @@ class NeuralDB():
 		self.log.warning("Resetting and recreating all databases and tables...")
 
 		self.dbs = []
+		self.collections = []
 
 		for d in self.db_string:
 			if d == "vision":
@@ -61,6 +62,11 @@ class NeuralDB():
 				self.log.info("Vision database is included in NeuralDB search.")
 
 				self.dbs.append(self.vision)
+
+				self.collections.append(self.obj_desc)
+				self.collections.append(self.obj_location)
+				self.collections.append(self.obj_obj_relation)
+				self.collections.append(self.obj_users)
 			if d == "nlp":
 				self.nlp = self.client["NLP"]
 
@@ -70,6 +76,9 @@ class NeuralDB():
 				self.log.info("NLP database is included in NeuralDB search.")
 
 				self.dbs.append(self.nlp)
+
+				self.collections.append(self.word_desc)
+				self.collections.append(self.word_location)
 			if d == "common":
 				self.common = self.client["Common"]
 
@@ -78,6 +87,8 @@ class NeuralDB():
 				self.log.info("Common database is included in NeuralDB search.")
 
 				self.dbs.append(self.common)
+
+				self.collections.append(self.word_obj_relation)
 
 		try:
 			if self.vision is None:
@@ -332,3 +343,40 @@ class NeuralDB():
 					self.log.info(f"        ===> {j}")
 					data.append(j)
 		return data
+
+	def remove_duplicates(self):
+		_locals = locals()
+		print(self.vision.ObjectDesc)
+		for d in self.dbs:
+			for i in d.list_collection_names():
+				exec(f"db_col = self.client.{d.name}.{i}", _locals)
+				db_col = _locals['db_col']
+
+				repeated_val = ""
+
+				if "vision" in d.name.lower():
+					repeated_val = "obj_name"
+					print("vision")
+				if "nlp" in d.name.lower():
+					repeated_val = "word_name"
+					print("nlp")
+
+				replic = db_col.aggregate([  # Cursor with all duplicated documents
+					{'$group': {
+						'_id': {repeated_val: f'${repeated_val}'},  # Duplicated field
+						'uniqueIDs': {'$addToSet': '$_id'},
+						'total': {'$sum': 1}
+					}
+					},
+					{'$match': {
+						'total': {'$gt': 1}  # Holds how many duplicates for each group, if you need it.
+					}
+					}
+				])
+				# Result is a list of lists of ObjectsIds
+				for i in replic:
+					print(i)
+					for idx, j in enumerate(i['uniqueIDs']):  # It holds the ids of all duplicates
+						if idx != 0:  # Jump over first element to keep it
+							db_col.delete_one({'_id': j})
+
