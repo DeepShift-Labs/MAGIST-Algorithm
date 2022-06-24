@@ -43,6 +43,7 @@ class RoughCluster():
 		:param masked_img_dir: Location of the exported image directories.
 		:return: None
 		"""
+
 		def image_to_pandas(image):
 			"""
 
@@ -67,7 +68,7 @@ class RoughCluster():
 		img = imread(img_location)
 		img = resize(img, img_size)
 		plt.figure(num=None, figsize=(8, 6), dpi=80)
-		if(self.matplot):
+		if (self.matplot):
 			imshow(img)
 
 		self.log.info("Input image resized and configured for clustering computation.")
@@ -77,21 +78,21 @@ class RoughCluster():
 		kmeans = KMeans(n_clusters=n_of_clusters, random_state=0).fit(df_img)
 		self.log.info("Image clustering complete!")
 
-		result = kmeans.labels_.reshape(img.shape[0],img.shape[1])
-		if(self.matplot):
+		result = kmeans.labels_.reshape(img.shape[0], img.shape[1])
+		if (self.matplot):
 			imshow(result, cmap='viridis')
 			plt.show()
 
-		fig, axes = plt.subplots(1,n_of_clusters, figsize=(15, 12))
+		fig, axes = plt.subplots(1, n_of_clusters, figsize=(15, 12))
 
 		clustered_img = []
 
 		for n, ax in enumerate(axes.flatten()):
 			img2 = imread(img_location)
 			img2 = resize(img2, img_size)
-			img2[:, :, 0] = img2[:, :, 0]*(result==[n]) # Disabling pixels of certain type
-			img2[:, :, 1] = img2[:, :, 1]*(result==[n]) # Disabling pixels of certain type
-			img2[:, :, 2] = img2[:, :, 2]*(result==[n]) # Disabling pixels of certain type
+			img2[:, :, 0] = img2[:, :, 0] * (result == [n])  # Disabling pixels of certain type
+			img2[:, :, 1] = img2[:, :, 1] * (result == [n])  # Disabling pixels of certain type
+			img2[:, :, 2] = img2[:, :, 2] * (result == [n])  # Disabling pixels of certain type
 			unit_img = img_as_ubyte(img2)
 			try:
 				imsave(f'{masked_img_dir}/masked{n}.jpg', unit_img)
@@ -99,14 +100,13 @@ class RoughCluster():
 				pathlib.Path(masked_img_dir).mkdir(parents=True, exist_ok=True)
 				imsave(f'{masked_img_dir}/masked{n}.jpg', unit_img)
 			clustered_img.append(f'{masked_img_dir}/masked{n}.jpg')
-			ax.imshow(img2);
+			ax.imshow(img2)
 			ax.set_axis_off()
 		fig.tight_layout()
-		if(self.matplot):
+		if (self.matplot):
 			plt.show()
 
 		return clustered_img
-
 
 # unsupervised_clusters(3, 'test.jpg', (540, 480), "./Masks")
 # unsupervised_clusters(2, 'masked2.jpg', (540, 480), ".")
