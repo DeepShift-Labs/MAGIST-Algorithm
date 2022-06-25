@@ -344,13 +344,54 @@ class NeuralDB():
 					data.append(j)
 		return data
 
+
+	def search_entire_db(self, term):
+		"""Search for entire database by term in the NLP database.
+
+		:param term: The term to search for(string).
+
+		:return: A dictionary containing the entire database.
+		"""
+
+		self._locals_search = locals()
+
+		results = []
+
+		self.log.info(f"Searching entire database for: {term}")
+
+		for d in self.dbs:
+			self.log.info(f"===> Database: {d.name}")
+			for c in d.list_collection_names():
+				self.log.info(f"    ===> Collection: {c}")
+				exec(f"db_col_search = self.client.{d.name}.{c}", self._locals_search)
+				db_col_search = self._locals_search['db_col_search']
+
+				cursor = d[c].find({})
+				keys = list(cursor.next().keys())
+
+				for key in keys:
+					self.log.info(f"        ===> Key: {c}")
+					results.append(db_col_search.find({key : re.compile(rf"\b{term}\b", re.IGNORECASE)}))
+		final_results = []
+
+		for i in results:
+			for j in i:
+				final_results.append(j)
+
+		return final_results
+
+
+
 	def remove_duplicates(self):
-		_locals = locals()
+		"""Remove duplicates from the Vision database.
+		"""
+
+		self._locals = locals()
 		print(self.vision.ObjectDesc)
 		for d in self.dbs:
 			for i in d.list_collection_names():
-				exec(f"db_col = self.client.{d.name}.{i}", _locals)
-				db_col = _locals['db_col']
+				exec(f"db_col = self.client.{d.name}.{i}", self._locals)
+				db_col = self._locals['db_col']
 
 				repeated_val = ""
 
@@ -375,7 +416,6 @@ class NeuralDB():
 				])
 				# Result is a list of lists of ObjectsIds
 				for i in replic:
-					print(i)
 					for idx, j in enumerate(i['uniqueIDs']):  # It holds the ids of all duplicates
 						if idx != 0:  # Jump over first element to keep it
 							db_col.delete_one({'_id': j})
