@@ -1,10 +1,9 @@
 from MAGIST.Vision.UnsupervisedModels.img_cluster import RoughCluster
-import time, os
 import numpy as np
 
 cluster = RoughCluster("config.json")
 
-imgs = cluster.unsupervised_clusters(3, "Input.jpg", (200, 200), "Clusters")
+imgs = cluster.unsupervised_clusters(3, "2.jpg", (200, 200), "Clusters")
 
 
 from MAGIST.Utils.WebScraper.google import GoogleScraper
@@ -26,8 +25,6 @@ queue.detach_thread()
 
 priority = 1
 
-def dummy(a, b, c):
-	time.sleep(30)
 
 for l in labels:
 	queue.put_queue(scraper.download_raw_img_dataset, l, 10, "Data/", name=f"Downloading {l}", priority=priority)
@@ -73,6 +70,7 @@ for l in labels:
 	description = wiki.get_summary(l)
 	neural_db.insert_obj_desc(l, description)
 
+neural_db.remove_duplicates()
 
 from MAGIST.NLP.AudioTranscriber import GoogleAudioTranscriber
 
@@ -91,12 +89,31 @@ for i in selfattention.__call__(text):
 
 
 search_res = []
+unused_terms = []
 for i in selected:
-	res = neural_db.search_obj_details(i)
+	res = neural_db.search_entire_db(i)
 	if res != []:
 		search_res.append(res)
+	else:
+		unused_terms.append(i)
 
 search_res = np.array(search_res)
 search_res = np.squeeze(search_res)
 
-print(search_res[0]["obj_desc"])
+try:
+	print("=====================================================================================================")
+	print(search_res)
+	print("=====================================================================================================")
+	print(unused_terms)
+except IndexError:
+	print("No results found")
+
+from MAGIST.NLP.WordScraper import FullDictionarySearch
+
+dict = FullDictionarySearch("config.json")
+
+for i in unused_terms:
+	definition = dict.define(i)
+	neural_db.insert_word_desc(i, definition)
+
+neural_db.remove_duplicates()
