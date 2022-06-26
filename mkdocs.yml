@@ -1,0 +1,69 @@
+INHERIT: site_settings.yml
+
+
+###################  NO CHANGES BEYOND THIS POINT  ################
+# MkDocs Wiki: https://github.com/mkdocs/mkdocs/wiki
+docs_dir: "docs" # Default is "docs"
+site_dir: "site" # Default is "site"
+use_directory_urls: true # Default is true.
+
+
+
+theme:
+  #Material Theme used here: https://github.com/squidfunk/mkdocs-material
+  # Material Theme Detailed Reference: https://squidfunk.github.io/mkdocs-material/reference/abbreviations/
+  #Other Themes: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+#    - navigation.tabs
+#    - navigation.sections
+    - navigation.top
+    - content.code.annotate
+#    - navigation.expand   # This will expand navigation on left
+    
+
+plugins:  
+  - search:
+      lang: en
+      prebuild_index: true
+      indexing: full #Default is full. Other choices are "sections", "titles"
+      
+markdown_extensions:
+  - footnotes
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.critic
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.details
+  - admonition
+  - abbr
+  - pymdownx.snippets  
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - javascripts/tables.js
+  
+#extra_css

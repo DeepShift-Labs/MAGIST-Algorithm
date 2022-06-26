@@ -1,0 +1,37 @@
+site_name: DeepShift Labs Documentation
+repo_url: https://github.com/DeepShift-Labs/MAGIST-Algorithm
+edit_uri: "edit/main/docs" # No need to make changes here if you are using github
+site_description: "DeepShift Labs Documentation"
+site_author: Ankur Shah
+dev_addr: 127.0.0.1:8011
+
+nav:
+  - "Read Me": README.md
+  - "Getting Started": "Getting Started/1 - Initial Steps.md"
+#  - "SOLID Principles": "General/SOLID Principles.md"
+#  - Markdown:
+#      - Markdown Syntax: Markdown/Markdown Syntax.md
+#      - MkDocks Material Syntax: Markdown/MkDocs Material Syntax.md
+#  - Git:
+#    - Concepts: Git/Concepts.md
+#    - "Reset, Revert & Rebase": Git/Reset-Revert-Rebase.md
+#    - Troubleshoot: Git/Troubleshoot.md
+#  - Java:
+#    - Concepts: General/Java/General.md
+#  - Windows:
+#    - General: General/Windows/General.md
+#    - Files and Folders: General/Windows/Files and Folders.md
+#  - Enterprise Architect:
+#    - The Disciplined Agile Framework : Enterprise Architect/DA Framework.md
+#    - Event Sourcing: Enterprise Architect/Event Sourcing.md
+#  - Project Management:
+#    - Scrum: Project Management/Scrum.md
+#  - ELK Stack:
+#    - ElasticSearch:
+#      - Basics: ElasticSearch-LogStash-Kibana/EalsticSearch/Basic.md
+#      - Installation: ElasticSearch-LogStash-Kibana/EalsticSearch/Installation.md
+#      - Logging: ElasticSearch-LogStash-Kibana/EalsticSearch/Logging.md
+#      - Querying:
+#        - Prep Work: ElasticSearch-LogStash-Kibana/EalsticSearch/Querying/Prep Work.md
+#        - Full-Text Queries: ElasticSearch-LogStash-Kibana/EalsticSearch/Querying/Full-Text Queries.md
+#        - Term Queries: ElasticSearch-LogStash-Kibana/EalsticSearch/Querying/Term Queries.md
