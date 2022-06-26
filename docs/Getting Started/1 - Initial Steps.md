@@ -15,10 +15,11 @@ General intelligence is the ability of a machine to automatically acquire and tr
 ## Setup
 MAGIST is a complex project, so a clean and efficient work space is essential. The entirety of this project was made in 
 the following environment:
+
  * PyCharm Professional
  * Python 3.10.4
- * Anaconda Environment (https://www.anaconda.com/)
- * Firefox Headless (https://www.mozilla.org/en-US/firefox/headless/)
+ * [Anaconda Environment](https://www.anaconda.com/)
+ * [Firefox Headless](https://www.mozilla.org/en-US/firefox/headless/)
 
 Replicating this environment is crucial for stability and performance. 
 

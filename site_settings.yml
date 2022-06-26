@@ -1,13 +1,14 @@
-site_name: DeepShift Labs Documentation
+site_name: MAGIST Algorithm Documentation - DeepShift Labs
 repo_url: https://github.com/DeepShift-Labs/MAGIST-Algorithm
 edit_uri: "edit/main/docs" # No need to make changes here if you are using github
-site_description: "DeepShift Labs Documentation"
-site_author: Ankur Shah
+site_description: "MAGIST Algorithm Documentation - DeepShift Labs"
+site_author: Krishna Shah
 dev_addr: 127.0.0.1:8011
 
 nav:
   - "Read Me": README.md
-  - "Getting Started": "Getting Started/1 - Initial Steps.md"
+  - "Getting Started":
+      - "Installation": "Getting Started/1 - Initial Steps.md"
 #  - "SOLID Principles": "General/SOLID Principles.md"
 #  - Markdown:
 #      - Markdown Syntax: Markdown/Markdown Syntax.md
