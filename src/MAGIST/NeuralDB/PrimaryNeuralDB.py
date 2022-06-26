@@ -150,9 +150,9 @@ class NeuralDB():
 		:param word_name: The name of the word(string).
 		:param word_desc: The description of the word(string).
 		"""
-
-		self.log.info(f"Inserting word description: {word_name} - {word_desc}")
-		self.word_desc.insert_one({"word_name": word_name, "word_desc": word_desc})
+		if word_desc != None:
+			self.log.info(f"Inserting word description: {word_name} - {word_desc}")
+			self.word_desc.insert_one({"word_name": word_name, "word_desc": word_desc})
 	def insert_word_location(self, word_name, word_location):
 		"""Insert word and its location into the NLP database.
 
@@ -359,6 +359,8 @@ class NeuralDB():
 
 		self.log.info(f"Searching entire database for: {term}")
 
+		final_results = []
+
 		for d in self.dbs:
 			self.log.info(f"===> Database: {d.name}")
 			for c in d.list_collection_names():
@@ -371,12 +373,14 @@ class NeuralDB():
 
 				for key in keys:
 					self.log.info(f"        ===> Key: {c}")
-					results.append(db_col_search.find({key : re.compile(rf"\b{term}\b", re.IGNORECASE)}))
-		final_results = []
-
-		for i in results:
-			for j in i:
-				final_results.append(j)
+					search = db_col_search.find({key : re.compile(rf"\b{term}\b", re.IGNORECASE)})
+					results.append(search)
+					try:
+						a = search.next()
+						self.log.info(f"            ===> Found: {a}")
+						final_results.append(a)
+					except:
+						self.log.info(f"            ===> Found: None")
 
 		return final_results
 
