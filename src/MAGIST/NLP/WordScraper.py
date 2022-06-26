@@ -3,11 +3,17 @@ import requests, json
 from ..Utils.LogMaster.log_init import MainLogger
 
 
+class ClassDeprecated(Exception):
+	pass
+
+
 class UrbanDictionary():
 	def __init__(self, config):
 		"""Initialize the Urban Dictionary API.
 		:param config: The config file(config.json).
 		"""
+
+		raise ClassDeprecated("This class is deprecated")
 
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("UrbanDictionary")
@@ -23,7 +29,7 @@ class UrbanDictionary():
 		querystring = {"term": word}
 
 		headers = {
-			"X-RapidAPI-Key": "ccb24b8108msh0b3a5c1ef1265b7p197610jsna515c20cf465",
+			"X-RapidAPI-Key": "xxx",
 			"X-RapidAPI-Host": "mashape-community-urban-dictionary.p.rapidapi.com"
 		}
 
@@ -89,14 +95,13 @@ class FullDictionarySearch():
 		root_log = MainLogger(config)
 		self.log = root_log.StandardLogger("FullDictionarySearch")
 
-		self.urban = UrbanDictionary(config)
 		self.dictdev = DicitonaryAPIDev(config)
 
 	def define(self, word):
 		definition = self.dictdev.define(word)
 
 		if definition == "No definition found":
-			self.log.info("No definition found in DictionaryAPI.dev. Trying UrbanDictionary...")
-			definition = self.urban.define(word)
+			self.log.info("No definition found in DictionaryAPI.dev.")
+			definition = None
 
 		return definition
