@@ -37,12 +37,12 @@ slicer = ImageSlicer("config.json")
 
 
 
-# for l in labels:
-# 	path = os.path.join("Data", l)
-# 	slicer.image_integrity_verification(path, delete_invalid=True)
-# 	slicer.resizer((500, 500), path)
-# 	coordinates = slicer.coordinate_compute((500, 500), (100, 100))
-# 	slicer.crop_segments(coordinates, path, "Sliced", l)
+for l in labels:
+	path = os.path.join("Data", l)
+	slicer.image_integrity_verification(path, delete_invalid=True)
+	slicer.resizer((500, 500), path)
+	coordinates = slicer.coordinate_compute((500, 500), (100, 100))
+	slicer.crop_segments(coordinates, path, "Sliced", l)
 
 
 
@@ -51,7 +51,7 @@ from MAGIST.Vision.FullySupervisedModels.MAGIST_Lite_Detector import MAGIST_CNN
 
 cnn = MAGIST_CNN("config.json")
 
-# queue.put_queue(cnn, name="MAGIST_CNN_Trainer", priority=10)
+queue.put_queue(cnn, name="MAGIST_CNN_Trainer", priority=10)
 
 from MAGIST.Utils.WebScraper.wikipedia import WikipediaScraper
 from MAGIST.NeuralDB.MongoUtils import AdminUtils
