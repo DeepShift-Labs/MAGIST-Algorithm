@@ -9,6 +9,7 @@ nav:
   - "Read Me": README.md
   - "Getting Started":
       - "Installation": "Getting Started/1 - Initial Steps.md"
+      - "Process Overview": "Getting Started/2 - Process Overview.md"
 #  - "SOLID Principles": "General/SOLID Principles.md"
 #  - Markdown:
 #      - Markdown Syntax: Markdown/Markdown Syntax.md
