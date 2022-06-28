@@ -10,6 +10,10 @@ nav:
   - "Getting Started":
       - "Installation": "Getting Started/1 - Initial Steps.md"
       - "Process Overview": "Getting Started/2 - Process Overview.md"
+      - "Next Steps": "Getting Started/3 - Next Steps.md"
+  - "MAGIST Vision":
+      - "Basics": "1 - Basics.md"
+      - "K-Means Clustering": "2 - K-Means Clustering.md"
 #  - "SOLID Principles": "General/SOLID Principles.md"
 #  - Markdown:
 #      - Markdown Syntax: Markdown/Markdown Syntax.md
