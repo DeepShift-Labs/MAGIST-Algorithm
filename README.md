@@ -2,6 +2,14 @@
 Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Zeta!
 ![Github Banner(1)](https://user-images.githubusercontent.com/85193239/171949594-50a1f380-de26-4cd1-94d8-769a4c032455.png)
 
+***
+
+## Official Documentation
+
+**We now have official documentation available [here](https://deepshift.dev/wiki/magist)!**
+
+***
+
 ## Working Principal
 Here is a flow diagram with the entire system drawn:
 https://lucid.app/documents/embeddedchart/6d04c807-0b77-495e-9b84-3abf38f32630
