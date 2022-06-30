@@ -12,7 +12,7 @@
         <meta name="author" content="Krishna Shah">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/favicon.png">
       <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.8">
     
     
@@ -56,7 +56,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="">
   
     
     
@@ -66,6 +66,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#k-means-clustering" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -77,7 +82,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="MAGIST Algorithm Documentation - DeepShift Labs" class="md-header__button md-logo" aria-label="MAGIST Algorithm Documentation - DeepShift Labs" data-md-component="logo">
+    <a href="https://deepshift.dev" title="MAGIST Algorithm Documentation - DeepShift Labs" class="md-header__button md-logo" aria-label="MAGIST Algorithm Documentation - DeepShift Labs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -107,19 +112,19 @@
         
           
           
-          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
             </label>
           
         
           
           
-          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
             <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
             </label>
           
         
@@ -199,7 +204,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="MAGIST Algorithm Documentation - DeepShift Labs" class="md-nav__button md-logo" aria-label="MAGIST Algorithm Documentation - DeepShift Labs" data-md-component="logo">
+    <a href="https://deepshift.dev" title="MAGIST Algorithm Documentation - DeepShift Labs" class="md-nav__button md-logo" aria-label="MAGIST Algorithm Documentation - DeepShift Labs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -319,6 +324,54 @@
 
   
   
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Configuration/1%20-%20Setup%20Config%20File/" class="md-nav__link">
+        Setup Config File
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -326,18 +379,18 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3">
+        <label class="md-nav__link" for="__nav_4">
           MAGIST Vision
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="MAGIST Vision" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
+        <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           MAGIST Vision
         </label>
@@ -369,10 +422,43 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          K-Means Clustering
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         K-Means Clustering
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-using-magist" class="md-nav__link">
+    Implementation Using MAGIST
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -402,6 +488,23 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-using-magist" class="md-nav__link">
+    Implementation Using MAGIST
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -419,9 +522,51 @@
 
 
 
-  <h1>K-Means Clustering</h1>
+<h1 id="k-means-clustering">K-Means Clustering</h1>
+<p>K-Means Clustering is a simple but powerful unsupervised learning <span class="twemoji" title="Unsupervised learning is a technique that involves a mathematical model learning the underlying patterns of a given data without any external assistance. This can allow us to see patterns that humans may have never thought of."><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2v6Z"/></svg></span> algorithm. K-Means Clustering aims to divide a given sample data into "k" groups. The process is intuitivly simple:</p>
+<ol>
+<li>Place k number centroids of the clusters in random locations in the data space.</li>
+<li>For each sample in the data space, associate its class with the nearest centroid.</li>
+<li>For each cluster, compute the geometric center and move the centroids there.</li>
+<li>Repeat step 2 and 3 until you don't need to change the location of the centroid.</li>
+</ol>
+<details class="info" open="open">
+<summary>Automatically compute "k"</summary>
+<p>There is a way to find the number of clusters(k) you need. This technique utilizes the elbow curve that is generated by creating a line graph of the number of clusters "k" and the corresponding reduction in variation. This is not currently implemented in MAGIST, but there are plans to implement it soon.</p>
+</details>
+<p>IMAGES</p>
+<h2 id="implementation-using-magist">Implementation Using MAGIST</h2>
+<p>Currently, MAGIST uses K-Means Clustering for masking images. It attempts to identify individual objects in an image which can then be further processed to extract more information. For this, you must use the <code>UnsupervisedModels</code> under the <code>Vision</code> directory. It can be imported like so:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">MAGIST.Vision.UnsupervisedModels.img_cluster</span> <span class="kn">import</span> <span class="n">RoughCluster</span> <span class="c1"># (1)</span>
+</code></pre></div>
+<ol>
+<li>UnsupervisedModels contains a Python file named <code>img_cluster.py</code> that contains the <code>RoughCluster</code> class. This is where all the necessary methods for computing the clusters.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This computation is done with the help of SciKit-Learn and Pandas.</p>
+</div>
+<p>Now, create an instance of the <code>RoughCluster</code> class:</p>
+<div class="highlight"><pre><span></span><code><span class="n">clusterer</span> <span class="o">=</span> <span class="n">RoughCluster</span><span class="p">(</span><span class="s2">&quot;PATH/TO/CONFIG.json&quot;</span><span class="p">)</span> <span class="c1"># (1)</span>
+</code></pre></div>
+<ol>
+<li>More information about the config file is located here: <a href="/Configuration/1 - Setup Config File">Setup Config File</a></li>
+</ol>
+<p>Finally, we can compute the cluster:</p>
+<div class="highlight"><pre><span></span><code><span class="n">n_of_clusters</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">img_location</span> <span class="o">=</span> <span class="s2">&quot;Data/test.jpg&quot;</span>
+<span class="n">img_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">masked_img_dir</span> <span class="o">=</span> <span class="s2">&quot;Data/Clusters&quot;</span>
 
-
+<span class="n">masked_img_locations</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">unsupervised_clusters</span><span class="p">(</span><span class="n">n_of_clusters</span><span class="p">,</span> <span class="n">img_location</span><span class="p">,</span> <span class="n">img_size</span><span class="p">,</span> <span class="n">masked_img_dir</span><span class="p">)</span>
+</code></pre></div>
+<p>Here is what <code>masked_img_locations</code> should look like:</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s2">&quot;Data/Clusters/masked0.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;Data/Clusters/masked1.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;Data/Clusters/masked2.jpg&quot;</span><span class="p">]</span> <span class="c1"># (1)</span>
+</code></pre></div>
+<ol>
+<li>The amount of images listed depends on the <code>n_of_clusters</code>.</li>
+</ol>
+<p>These images are the final masked results. Through the config file, you can enable verbose to see the intermediate stage before it individually exporting the images.</p>
 
               
             </article>
@@ -479,7 +624,7 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "search.suggest", "search.highlight", "navigation.top", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "search.suggest", "search.highlight", "navigation.top", "content.code.annotate", "content.tooltips", "navigation.instant", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.0238f547.min.js"></script>
