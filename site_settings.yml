@@ -9,6 +9,14 @@ nav:
   - "Read Me": README.md
   - "Getting Started":
       - "Installation": "Getting Started/1 - Initial Steps.md"
+      - "Process Overview": "Getting Started/2 - Process Overview.md"
+      - "Next Steps": "Getting Started/3 - Next Steps.md"
+  - "Configuration":
+      - "Setup Config File": "Configuration/1 - Setup Config File.md"
+  - "MAGIST Vision":
+      - "Basics": "MAGIST Vision/1 - Basics.md"
+      - "K-Means Clustering": "MAGIST Vision/2 - K-Means Clustering.md"
+      - "Detection Data Management": "MAGIST Vision/3 - Detection Data Management.md"
 #  - "SOLID Principles": "General/SOLID Principles.md"
 #  - Markdown:
 #      - Markdown Syntax: Markdown/Markdown Syntax.md

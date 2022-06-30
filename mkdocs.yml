@@ -15,14 +15,18 @@ theme:
   #Other Themes: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
   name: material
   language: en
+#  logo: assets/favicon.png
+  favicon: assets/favicon.png
   palette:
     - scheme: default
+      primary: blue
       toggle:
-        icon: material/weather-night
+        icon: material/toggle-switch
         name: Switch to dark mode
     - scheme: slate
+      primary: blue
       toggle:
-        icon: material/weather-sunny
+        icon: material/toggle-switch-off-outline
         name: Switch to light mode
   features:
     - navigation.instant
@@ -33,6 +37,9 @@ theme:
     - navigation.top
     - content.code.annotate
 #    - navigation.expand   # This will expand navigation on left
+    - content.tooltips
+    - navigation.instant
+    - navigation.tracking
     
 
 plugins:  
@@ -55,12 +62,18 @@ markdown_extensions:
   - admonition
   - abbr
   - pymdownx.snippets  
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - def_list
   - pymdownx.tasklist:
       custom_checkbox: true
+
+extra:
+  homepage: https://deepshift.dev
   
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
