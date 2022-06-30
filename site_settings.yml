@@ -16,6 +16,7 @@ nav:
   - "MAGIST Vision":
       - "Basics": "MAGIST Vision/1 - Basics.md"
       - "K-Means Clustering": "MAGIST Vision/2 - K-Means Clustering.md"
+      - "Detection Data Management": "MAGIST Vision/3 - Detection Data Management.md"
 #  - "SOLID Principles": "General/SOLID Principles.md"
 #  - Markdown:
 #      - Markdown Syntax: Markdown/Markdown Syntax.md
