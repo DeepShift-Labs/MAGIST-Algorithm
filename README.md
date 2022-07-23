@@ -6,7 +6,7 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 
 ## Official Documentation
 
-**We now have official documentation available [here](https://deepshift.dev/wiki/magist)!**
+**We now have official documentation available [here](https://wiki.deepshift.dev)!**
 
 ***
 
