@@ -10,9 +10,6 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 
 ***
 
-## Working Principal
-Here is a flow diagram with the entire system drawn:
-https://lucid.app/documents/embeddedchart/6d04c807-0b77-495e-9b84-3abf38f32630
 
 ### Data
 The data is the most important element as the entire intelligence works around it. That is why it is important for the 
