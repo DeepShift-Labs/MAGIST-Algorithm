@@ -1,0 +1,90 @@
+PUT b
+{
+  "mappings" : {
+      "properties" : {
+        "Object" : {
+          "type" : "nested",
+          "properties" : {
+            "cat" : {
+              "type" : "nested",
+              "properties" : {
+                "description" : {
+                  "type" : "text",
+                  "fields" : {
+                    "keyword" : {
+                      "type" : "keyword",
+                      "ignore_above" : 256
+                    }
+                  }
+                },
+                "owner" : {
+                  "type" : "text",
+                  "fields" : {
+                    "keyword" : {
+                      "type" : "keyword",
+                      "ignore_above" : 256
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+  }
+}
+
+
+
+POST /b/_doc?pretty
+{
+  "Object": 
+  {
+    "cat": 
+    {
+      "description": "hfjhgfslkjhgsjhglkdhflhf",
+      "owner": "YoFace"
+    }
+    
+  }
+}
+
+
+
+
+
+
+GET /b/_search
+{
+  "query": {
+    "nested": {
+      "path": "Object",
+      "query": {
+        "nested": {
+          "path": "Object.cat",
+          "query": {
+            "multi_match": {
+              "query": "cat"
+            }
+          },
+          "inner_hits": {}
+        }
+      },
+      "inner_hits": {}
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
