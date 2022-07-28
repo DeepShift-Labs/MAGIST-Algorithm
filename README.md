@@ -15,9 +15,7 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 
 
 ### Data
-The data is the most crucial element as the entire intelligence works around it. That is why it is important for the 
-AI to process it and provide reasonable assumptions. There is another condition, however: the algorithm, in its finished 
-state, MUST be strictly Python code. This means no pre-trained models or presets. It must find its data and process it unsupervised. Although this architecture seems hard-coded in the present state, as more functionality is added, it will be more intelligent and decisive. Here, the data will assume the following structure:
+The data is the most crucial element as the entire intelligence works around it. That is why the AI needs to process it and provide reasonable assumptions. There is another condition, however: the algorithm, in its finished state, MUST be strictly Python code. This means no pre-trained models or presets. It must find its data and process it unsupervised. Although this architecture seems hard-coded in the present state, as more functionality is added, it will be more intelligent and decisive. Here, the data will assume the following structure:
 
 ```
 Object -> Common Associated Verbs, Synonyms, Events, Timestamps of usage, Nearby Objects, etc.
