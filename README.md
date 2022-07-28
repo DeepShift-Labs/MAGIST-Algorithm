@@ -15,9 +15,9 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 
 
 ### Data
-The data is the most important element as the entire intelligence works around it. That is why it is important for the 
+The data is the most crucial element as the entire intelligence works around it. That is why it is important for the 
 AI to process it and provide reasonable assumptions. There is another condition, however: the algorithm, in its finished 
-state, MUST be strictly Python code. This means no pre-trained models or presets. It must find its data and process it unsupervised. Although this architecture seems hard-codded in the present state, as more functionality is added, it will be more intelligent and decisive. Here, the data will assume the following structure:
+state, MUST be strictly Python code. This means no pre-trained models or presets. It must find its data and process it unsupervised. Although this architecture seems hard-coded in the present state, as more functionality is added, it will be more intelligent and decisive. Here, the data will assume the following structure:
 
 ```
 Object -> Common Associated Verbs, Synonyms, Events, Timestamps of usage, Nearby Objects, etc.
@@ -133,15 +133,15 @@ pip3 install MAGIST-Algorithm-x.x.x-py3-none-any.whl
 
 ## Contributing
 Your contribution, monetary or programmatically, is crucial for the rapid development of the algorithm and its training. 
-Please consider contributing. Even the smallest change to my README will be greatly appreciated.
+Please consider contributing. Even minute changes to our README will be greatly appreciated.
 
 ### Project Zeta
-We are building a fully biomimetic robot dog to implement MAGIST into. This will serve as the gateway between the AI and the physical world. 
+We are building a fully biomimetic robot dog to implement MAGIST into. This will serve as the gateway between MAGIST and the physical world. 
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=DeepShift-Labs&repo=Project-Zeta)](https://github.com/DeepShift-Labs/Project-Zeta)
 
 ***
 
 # Disclaimer
-Artificial Intelligence is a powerful field **meant only for research and study**, and it should be kept that way. Unethical use of the AI can have severe repercussions for society and the perpetrator. DeepShift Labs and any programs it develops are strictly for research purposes. Hence, all of our products, MAGIST included, are to be used **strictly** for research purposes. Misuse of this program can lead to heavy fines and prosecution.
+Artificial Intelligence is a powerful field **meant only for research and study**, and it should be kept that way. The unethical use of MAGIST can have severe repercussions for society and the perpetrator. DeepShift Labs and any programs it develops are strictly for research purposes. Hence, all of our products, MAGIST included, are to be used **strictly** for research purposes. Misuse of this program can lead to heavy fines and prosecution.
 Furthermore, to retitle, rebrand, or redistribute without **explicitly** crediting DeepShift Labs is illegal. 
