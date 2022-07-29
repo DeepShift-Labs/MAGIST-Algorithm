@@ -11,7 +11,7 @@ Multi-Agent Generally Intelligent Simultaneous Training Algorithm for Project Ze
 ***
 
 ## Working Principle
-![Drawing](https://user-images.githubusercontent.com/85193239/180865087-f5da4734-11c7-4019-8a74-309e3b2198a7.png)
+![Drawing](https://user-images.githubusercontent.com/85193239/181803134-320f9493-aea7-4350-8b68-c7f7d62f8293.png)
 
 
 ### Data
