@@ -1,0 +1,52 @@
+POST /magist_vision/_doc
+{
+  "name": "TestObject",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec ligula tempor, dictum lacus id, laoreet diam. Nulla consequat turpis quis mi blandit tempus. Vivamus auctor ante justo, a scelerisque arcu tristique vel. Donec ac orci bibendum, rhoncus metus nec, dapibus ex. Pellentesque eu felis erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae tincidunt eros. Maecenas est dui, egestas eleifend gravida et, suscipit et diam. Sed in est metus. Vivamus mollis augue et mi efficitur maximus.",
+  "users": "Kris, Ash, Andy, Amy",
+  "related_objects": "cat",
+  "location": "Kitchen, Living Room"
+}
+
+POST testdb1/_search?explain=false
+{
+  "query": {
+    "multi_match": {
+      "query" : "banana",
+      "analyzer": "main_analyzer"
+    }
+  }
+}
+
+GET magist_nlp/_settings
+
+PUT /magist_nlp/
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "main_analyzer": {
+          "type": "fingerprint",
+          "stopwords": "_english_"
+        }
+      }
+    },
+    "similarity": {
+      "main_similarity": {
+        "type": "LMJelinekMercer",
+        "lambda": 0.5
+      }
+    }
+  },
+
+  "mappings": {
+      "properties": {
+        "name":    { "type": "text" },
+        "description":  { "type": "text"  },
+        "users":   { "type": "text"  },
+        "related_objects":  { "type": "text"  },
+        "location":  { "type": "text"  }
+      }
+    }
+}
+
+GET /testdb1/_all
