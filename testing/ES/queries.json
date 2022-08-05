@@ -1,0 +1,36 @@
+{
+  "object_exists": {
+    "query": {
+      "query_string": {
+        "query" : "",
+        "fields": ["name"],
+        "analyzer": "keyword"
+      }
+    }
+  },
+  "object_full": {
+    "query": {
+      "multi_match": {
+        "query" : "",
+        "analyzer": "main_analyzer"
+      }
+    }
+  },
+  "word_exists": {
+    "query": {
+      "query_string": {
+        "query" : "",
+        "fields": ["name"],
+        "analyzer": "keyword"
+      }
+    }
+  },
+  "word_full": {
+    "query": {
+      "multi_match": {
+        "query" : "",
+        "analyzer": "main_analyzer"
+      }
+    }
+  }
+}
