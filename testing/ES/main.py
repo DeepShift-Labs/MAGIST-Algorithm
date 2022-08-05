@@ -95,7 +95,7 @@ def add_doc(es_uri, index_name, data_type, data, update="add"):
 			print(type(hit_source["users"]))
 
 			if update == "concatenate" or update == "blind":
-				hit_source["name"] += name
+				hit_source["name"] = name
 				hit_source["description"] += description
 				hit_source["users"] += users
 				hit_source["related_objects"] += related_objects
@@ -134,6 +134,88 @@ def add_doc(es_uri, index_name, data_type, data, update="add"):
 				print(f"Error adding object {name} to index {index_name}!")
 		else:
 			print(f"Error checking if object {name} exists in index {index_name}!")
+
+	elif data_type == 'object_db_schema':
+		index_check = requests.get(es_uri + "/" + index_name)
+		index_check = json.dumps(str(index_check))
+		if "200" not in str(index_check):
+			raise RuntimeError(f"Index {index_name} not found!")
+
+		try:
+			word = data['word']
+			definition = data['definition']
+			users = data['users']
+			related_words = data['related_words']
+			related_objects = data['related_objects']
+			locations = data['locations']
+		except KeyError:
+			raise RuntimeError("Improperly formatted data. Data MUST be in the following format: {name: str, "
+			                   "description: str, users: list, related_objects: list, locations: list}")
+
+		queries_file = open('queries.json', 'r')
+		queries = json.load(queries_file)
+
+		queries["word_exists"]["query"]["query_string"]["query"] = word
+
+		word_exists = requests.post(es_uri + "/" + index_name + "/_search", json=queries["word_exists"])
+		word_exists_simple = json.dumps(str(word_exists))
+		word_exists_full = json.loads(str(word_exists.text))
+
+		print(word_exists_full["hits"]["total"]["value"])
+
+		if "200" in word_exists_simple and word_exists_full["hits"]["total"]["value"] > 0 and update != "add":
+			print(f"Object {word} already exists in index {index_name}!")
+			if word_exists_full["hits"]["total"]["value"] > 1:
+				raise RuntimeError("Search for existing objects failed and returned more than one result.")
+
+			hit = word_exists_full["hits"]["hits"][0]
+			hit_id = hit["_id"]
+			hit_source = hit["_source"]
+
+			print(type(hit_source["users"]))
+
+			if update == "concatenate" or update == "blind":
+				hit_source["word"] += word
+				hit_source["description"] += definition
+				hit_source["users"] += users
+				hit_source["related_objects"] += related_objects
+				hit_source["related_words"] += related_words
+				hit_source["locations"] += locations
+			elif update == "overwrite":
+				hit_source["word"] = word
+				hit_source["description"] = definition
+				hit_source["users"] = users
+				hit_source["related_objects"] = related_objects
+				hit_source["related_words"] = related_words
+				hit_source["locations"] = locations
+
+			hit_source = json.dumps(hit_source)
+			print(hit_source)
+			hit_source = """{"doc":""" + hit_source + "}"
+			print(hit_source)
+			hit_source = json.loads(hit_source)
+			print(hit_source)
+
+			update_uri = es_uri + "/" + index_name + "/_update/" + hit_id
+			update_stat = requests.post(update_uri, json=hit_source)
+			print(update_stat.text)
+
+
+		elif "200" in word_exists_simple and word_exists_full["hits"]["total"]["value"] == 0 and update == "add":
+			print(f"Object {word} does not exist in index {index_name}! Proceeding to add object...")
+
+			data_uri = es_uri + "/" + index_name + "/_doc"
+			data_stat = requests.post(data_uri, json=data)
+			data_stat = json.dumps(str(data_stat))
+
+			print(data_stat)
+
+			if "201" in str(data_stat):
+				print(f"Object {word} successfully added to index {index_name}!")
+			else:
+				print(f"Error adding object {word} to index {index_name}!")
+		else:
+			print(f"Error checking if object {word} exists in index {index_name}!")
 
 
 # schema_mapper(es_uri, "testdb1", "object_db_schema")
