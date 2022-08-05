@@ -135,7 +135,7 @@ def add_doc(es_uri, index_name, data_type, data, update="add"):
 		else:
 			print(f"Error checking if object {name} exists in index {index_name}!")
 
-	elif data_type == 'object_db_schema':
+	elif data_type == 'word_db_schema':
 		index_check = requests.get(es_uri + "/" + index_name)
 		index_check = json.dumps(str(index_check))
 		if "200" not in str(index_check):
@@ -227,3 +227,4 @@ def add_doc(es_uri, index_name, data_type, data, update="add"):
 add_doc(es_uri, "testdb1", "object_db_schema",
         {"name": "bananabanana", "description": "l", "users": ["l"],
          "related_objects": ["l"], "locations": ["l"]}, update="overwrite")
+
