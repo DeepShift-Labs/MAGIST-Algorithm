@@ -1,0 +1,8 @@
+name: MAGIST-Algorithm
+
+channels:
+  - default
+  - conda-forge
+
+dependencies:
+  - python=3.10.4

@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "MAGIST-Algorithm"
+version = "0.1.0"
+description = ""
+authors = ["DragonflyRobotics <kshahusa@gmail.com>"]
+license = "GNU GPL v3.0"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+beautifulsoup4 = "^4.11.1"
+Google-Images-Search = "^1.4.3"
+matplotlib = "^3.5.2"
+numpy = "^1.23.1"
+pandas = "^1.4.3"
+Pillow-PIL = "^0.1dev"
+pymongo = "^4.2.0"
+requests = "^2.28.1"
+urllib3 = "^1.26.11"
+scikit-image = "^0.19.3"
+scikit-learn = "^1.1.2"
+selenium = "^4.4.0"
+SpeechRecognition-ForkedVersion = "^3.9.2"
+tensorflow = "^2.9.1"
+tqdm = "^4.64.0"
+wikipedia = "^1.4.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
