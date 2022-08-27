@@ -1,0 +1,61 @@
+{
+  "object_db_schema": {
+    "settings": {
+      "analysis": {
+        "analyzer": {
+          "main_analyzer": {
+            "type": "fingerprint",
+            "stopwords": "_english_"
+          }
+        }
+      },
+      "similarity": {
+        "main_similarity": {
+          "type": "LMJelinekMercer",
+          "lambda": 0.5
+        }
+      }
+    },
+
+    "mappings": {
+      "properties": {
+        "name":    { "type": "keyword" },
+        "description":  { "type": "text"  },
+        "users":   { "type": "text"  },
+        "related_objects":  { "type": "text"  },
+        "location":  { "type": "text"  }
+      }
+    }
+  },
+  "word_db_schema": {
+    "settings": {
+      "analysis": {
+        "analyzer": {
+          "main_analyzer": {
+            "type": "fingerprint",
+            "stopwords": "_english_"
+          }
+        }
+      },
+      "similarity": {
+        "main_similarity": {
+          "type": "LMJelinekMercer",
+          "lambda": 0.5
+        }
+      }
+    },
+
+    "mappings": {
+      "properties": {
+        "word":    { "type": "text" },
+        "definition":  { "type": "text"  },
+        "users":   { "type": "text"  },
+        "related_words":  { "type": "text"  },
+        "related_objects":  { "type": "text"  },
+        "location":  { "type": "text"  }
+      }
+    }
+  }
+}
+
+

@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/Sliced" />
       <excludeFolder url="file://$MODULE_DIR$/src/Data" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (MAGIST_AI)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.10 (MAGIST-Algorithm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
