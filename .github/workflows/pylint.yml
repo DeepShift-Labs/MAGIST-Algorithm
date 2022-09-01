@@ -17,7 +17,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+        pip install pylint autopep8
+    - name: Fixing Indentation with AutoPEP8
+      working-directory: ./src/MAGIST
+      run: |
+        autopep8 --in-place --recursive .
     - name: Analysing the code with pylint
       working-directory: ./src/MAGIST
       run: |
