@@ -16,9 +16,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python3 -m pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install pylint
     - name: Analysing the code with pylint
       working-directory: ./src/MAGIST
       run: |
-        python3 -m pylint $(git ls-files '*.py') --good-names=MAGIST,Vision
+        python -m pylint $(git ls-files '*.py') --good-names=MAGIST,Vision
