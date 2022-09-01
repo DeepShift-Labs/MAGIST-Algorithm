@@ -21,4 +21,4 @@ jobs:
     - name: Analysing the code with pylint
       working-directory: ./src/MAGIST
       run: |
-        pylint $(git ls-files '*.py')
+        pylint $(git ls-files '*.py') --disable=C0103
