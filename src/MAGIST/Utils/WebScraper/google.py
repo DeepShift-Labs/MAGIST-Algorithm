@@ -6,14 +6,14 @@ object. The function download_raw_img_dataset takes a given keyword and download
 images.
 """
 
+import os
+import pathlib
+import json
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from google_images_search import GoogleImagesSearch
-import os
-import pathlib
-import json
 from googleapiclient.errors import HttpError
 
 from ..LogMaster.log_init import MainLogger
@@ -42,8 +42,8 @@ class GoogleScraper:
 
         config = pathlib.Path(config)
         config = config.resolve()  # Find absolute path from a relative one.
-        f = open(config)
-        config = json.load(f)
+        with open(config) as f:
+            config = json.load(f)
 
         for i in config['api_authentication']:
             try:
@@ -73,6 +73,8 @@ class GoogleScraper:
         """
         self.log.info(url + ' ' + str(progress) + '%')
 
+        return True
+
         # t = tqdm(total=100, desc=url)
         # t.update(progress)
 
@@ -100,7 +102,8 @@ class GoogleScraper:
         searchUrl = 'http://www.google.com/searchbyimage/upload'
         # Change header to ensure that Google Search still functions
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/39.0.2171.95 Safari/537.36'}
         multipart = {
             'encoded_image': (
                 filePath,
@@ -112,7 +115,8 @@ class GoogleScraper:
         response = requests.post(
             searchUrl,
             files=multipart,
-            allow_redirects=False)
+            allow_redirects=False,
+            timeout=20)
         fetchUrl = response.headers['Location']
 
         options = Options()
@@ -196,7 +200,8 @@ class GoogleScraper:
         filePath = os.path.join(filePath, keyword)
 
         self.log.info(
-            f"Initiating Google Image Search for key term: {keyword}. Will download {quantity} images to {filePath}.")
+            f"Initiating Google Image Search for key term: {keyword}. Will download {quantity} "
+            f"images to {filePath}.")
 
         os.makedirs(filePath, exist_ok=True)
 

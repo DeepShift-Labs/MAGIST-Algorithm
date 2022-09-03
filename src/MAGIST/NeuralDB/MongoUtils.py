@@ -20,6 +20,7 @@ class AdminUtils():
 
         :param config: The config file(string).
         """
+
         root_log = MainLogger(config)
         # Create a script specific logging instance
         self.log = root_log.StandardLogger("MongoAdminUtils")
@@ -28,8 +29,8 @@ class AdminUtils():
 
         config = pathlib.Path(config)
         config = config.resolve()  # Find absolute path from a relative one.
-        f = open(config)
-        config = json.load(f)
+        with open(config) as f:
+            config = json.load(f)
 
         for i in config['system_administration']:
             try:
@@ -43,6 +44,8 @@ class AdminUtils():
             except KeyError:
                 pass
 
+        self.db_client = mongo.MongoClient(self.mgsocket)
+
     def initialize_neuraldb(self):
         """Initialize the MongoDB connection.
 
@@ -50,11 +53,9 @@ class AdminUtils():
         """
 
         command = 'systemctl start mongod'
-        p = os.system('echo %s|sudo -S %s' % (self.passcode, command))
+        p = os.system(f'echo {self.passcode}|sudo -S {command}')
         self.log.info(
             "NeuralDB Launched Successfully! Attempting to connect to local socket...")
-
-        self.db_client = mongo.MongoClient(self.mgsocket)
 
         if self.db_client:
             self.log.info(
@@ -85,8 +86,6 @@ class AdminUtils():
         p = os.system('echo %s|sudo -S %s' % (self.passcode, command))
         self.log.info(
             "NeuralDB Re-Launched Successfully! Attempting to connect to local socket...")
-
-        self.db_client = mongo.MongoClient(self.mgsocket)
 
         if self.db_client:
             self.log.info(

@@ -34,7 +34,7 @@ class UrbanDictionary():
             "X-RapidAPI-Host": "mashape-community-urban-dictionary.p.rapidapi.com"}
 
         response = requests.request(
-            "GET", self.url, headers=headers, params=querystring)
+            "GET", self.url, headers=headers, params=querystring, timeout=20)
 
         json_data = json.loads(response.text)
 
@@ -69,7 +69,7 @@ class DicitonaryAPIDev():
 
         self.url = self.url + word
 
-        response = requests.request("GET", self.url, params=querystring)
+        response = requests.request("GET", self.url, params=querystring, timeout=20)
 
         json_data = json.loads(response.text)
 

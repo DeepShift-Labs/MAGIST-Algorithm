@@ -40,7 +40,7 @@ class WikipediaScraper:
             except BaseException:  # If the scraping fails, skip it and use the next best result.
                 self.log.warning(
                     "Wikipedia search retreival failed! Retrying with different search result...")
-                pass
+
         return summary
 
     def get_title(self, keyword):
@@ -62,5 +62,5 @@ class WikipediaScraper:
             except BaseException:  # If the scraping fails, skip it and use the next best result.
                 self.log.warning(
                     "Wikipedia search retrieval failed! Retrying with different search result...")
-                pass
+
         return title

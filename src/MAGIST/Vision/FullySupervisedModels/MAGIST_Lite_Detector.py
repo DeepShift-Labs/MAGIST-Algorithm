@@ -4,17 +4,19 @@ MAGIST Lite is a fully-supervised model that is trained on a large dataset of im
 and MAGIST_CNN_Predictor.
 """
 
-from ...Utils.LogMaster.log_init import MainLogger
+import datetime
+import json
+import os
+import pathlib
 from skimage import transform
 import numpy as np
 from PIL import Image
 from tqdm import tqdm
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
 import tensorflow as tf
-import datetime
-import json
-import os
-import pathlib
+
+from ...Utils.LogMaster.log_init import MainLogger
+
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 

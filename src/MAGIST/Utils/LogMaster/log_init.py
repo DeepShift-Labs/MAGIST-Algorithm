@@ -18,14 +18,14 @@ class CustomFormatter(logging.Formatter):
     red = "\x1b[31;20m"
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
-    format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    format_s = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
     FORMATS = {
-        logging.DEBUG: blue + format + reset,
-        logging.INFO: green + format + reset,
-        logging.WARNING: yellow + format + reset,
-        logging.ERROR: red + format + reset,
-        logging.CRITICAL: bold_red + format + reset
+        logging.DEBUG: blue + format_s + reset,
+        logging.INFO: green + format_s + reset,
+        logging.WARNING: yellow + format_s + reset,
+        logging.ERROR: red + format_s + reset,
+        logging.CRITICAL: bold_red + format_s + reset
     }
 
     def format(self, record):
@@ -44,8 +44,9 @@ class MainLogger():
         """
         config = pathlib.Path(config)
         config = config.resolve()  # Find absolute path from a relative one.
-        f = open(config)
-        config = json.load(f)
+
+        with open(config) as f:
+            config = json.load(f)
 
         for i in config['paths']:
             try:

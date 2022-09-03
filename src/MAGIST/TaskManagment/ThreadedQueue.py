@@ -6,9 +6,9 @@ The queue class contains methods to add, execute, thread, and process tasks in a
 import queue
 import threading
 import uuid
-import numpy as np
-import pathlib
 import json
+import pathlib
+import numpy as np
 
 from ..Utils.LogMaster.log_init import MainLogger
 
@@ -22,6 +22,7 @@ class MainPriorityQueue():
         :param config: The config file(config.json).
         """
 
+        self.guid = uuid.uuid4()
         self.q = queue.PriorityQueue()
 
         root_log = MainLogger(config)
@@ -32,8 +33,8 @@ class MainPriorityQueue():
 
         config = pathlib.Path(config)
         config = config.resolve()  # Find absolute path from a relative one.
-        f = open(config)
-        config = json.load(f)
+        with open(config) as f:
+            config = json.load(f)
 
         for i in config['task_management']:
             try:
@@ -59,7 +60,8 @@ class MainPriorityQueue():
             args = args[:len(args) - 3]
 
             self.log.info(
-                f'Received task: {last_item} with priority {second_last_item}. Unique ID assigned: {third_last_item}. Executing...')
+                f'Received task: {last_item} with priority {second_last_item}. '
+                f'Unique ID assigned: {third_last_item}. Executing...')
             [*returns] = [func(*args)]
             self.log.info(f'Finished {last_item} successfully.')
             self.q.task_done()
@@ -81,10 +83,8 @@ class MainPriorityQueue():
 
         args = list(args)
 
-        self.guid = uuid.uuid4()
-
         for i in args:
-            if i == name or i == priority:
+            if i in (name, priority):
                 raise ValueError(
                     "Name or priority cannot be used as argument. Please use priority= and name= in the function call.")
 

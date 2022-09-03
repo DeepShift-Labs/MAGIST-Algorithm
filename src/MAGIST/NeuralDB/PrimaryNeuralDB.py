@@ -22,6 +22,8 @@ class NeuralDB():
         :param db_client: The MongoDB client from MongoUtils.
         """
 
+        self.collections = []
+        self.dbs = []
         root_log = MainLogger(config)
         # Create a script specific logging instance
         self.log = root_log.StandardLogger("NeuralDB")
@@ -50,9 +52,6 @@ class NeuralDB():
             time.sleep(1)
         self.log.warning(
             "Resetting and recreating all databases and tables...")
-
-        self.dbs = []
-        self.collections = []
 
         for d in self.db_string:
             if d == "vision":

@@ -22,9 +22,10 @@ class ESDB():
         # Find absolute path from a relative one.
         queries_file = queries_file.resolve()
 
-        self.schema_file = f = open(schema_file, 'r')
+
+        self.schema_file = open(schema_file, 'r')
         self.schema_file_data = json.load(self.schema_file)
-        self.queries_file = f = open(queries_file, 'r')
+        self.queries_file = open(queries_file, 'r')
         self.queries_file_data = json.load(self.queries_file)
 
         self.log.debug(
@@ -57,11 +58,11 @@ class ESDB():
 
         schema_uri = self.es_uri + "/" + index_name
 
-        schema_stat = requests.put(schema_uri, json=specific_schema)
+        schema_stat = requests.put(schema_uri, json=specific_schema, timeout=20)
 
         schema_stat = json.dumps(str(schema_stat))
 
-        check_stat = requests.get(schema_uri + "/_settings")
+        check_stat = requests.get(schema_uri + "/_settings", timeout=20)
         check_stat = json.dumps(str(check_stat))
 
         if "200" in str(schema_stat) and "200" in str(check_stat):
@@ -96,7 +97,7 @@ class ESDB():
         success_status = "<Response [200]>"
 
         if data_type == 'object_db_schema':
-            index_check = requests.get(es_uri + "/" + index_name)
+            index_check = requests.get(es_uri + "/" + index_name, timeout=20)
             index_check = json.dumps(str(index_check))
             if "200" not in str(index_check):
                 raise RuntimeError(f"Index {index_name} not found!")
@@ -119,7 +120,8 @@ class ESDB():
 
             object_exists = requests.post(
                 es_uri + "/" + index_name + "/_search",
-                json=queries["object_exists"])
+                json=queries["object_exists"],
+                timeout=20)
             object_exists_simple = json.dumps(str(object_exists))
             object_exists_full = json.loads(str(object_exists.text))
 
@@ -159,7 +161,7 @@ class ESDB():
                 print(hit_source)
 
                 update_uri = es_uri + "/" + index_name + "/_update/" + hit_id
-                update_stat = requests.post(update_uri, json=hit_source)
+                update_stat = requests.post(update_uri, json=hit_source, timeout=20)
                 print(update_stat.text)
 
             elif "200" in object_exists_simple and object_exists_full["hits"]["total"][
@@ -168,7 +170,7 @@ class ESDB():
                     f"Object {name} does not exist in index {index_name}! Proceeding to add object...")
 
                 data_uri = es_uri + "/" + index_name + "/_doc"
-                data_stat = requests.post(data_uri, json=data)
+                data_stat = requests.post(data_uri, json=data, timeout=20)
                 data_stat = json.dumps(str(data_stat))
 
                 print(data_stat)
@@ -183,7 +185,7 @@ class ESDB():
                     f"Error checking if object {name} exists in index {index_name}!")
 
         elif data_type == 'word_db_schema':
-            index_check = requests.get(es_uri + "/" + index_name)
+            index_check = requests.get(es_uri + "/" + index_name, timeout=20)
             index_check = json.dumps(str(index_check))
             if "200" not in str(index_check):
                 raise RuntimeError(f"Index {index_name} not found!")
@@ -207,7 +209,8 @@ class ESDB():
 
             word_exists = requests.post(
                 es_uri + "/" + index_name + "/_search",
-                json=queries["word_exists"])
+                json=queries["word_exists"],
+                timeout=20)
             word_exists_simple = json.dumps(str(word_exists))
             word_exists_full = json.loads(str(word_exists.text))
 
@@ -249,7 +252,7 @@ class ESDB():
                 print(hit_source)
 
                 update_uri = es_uri + "/" + index_name + "/_update/" + hit_id
-                update_stat = requests.post(update_uri, json=hit_source)
+                update_stat = requests.post(update_uri, json=hit_source, timeout=20)
                 print(update_stat.text)
 
             elif "200" in word_exists_simple and word_exists_full["hits"]["total"]["value"] == 0 and update == "add":
@@ -257,7 +260,7 @@ class ESDB():
                     f"Object {word} does not exist in index {index_name}! Proceeding to add object...")
 
                 data_uri = es_uri + "/" + index_name + "/_doc"
-                data_stat = requests.post(data_uri, json=data)
+                data_stat = requests.post(data_uri, json=data, timeout=20)
                 data_stat = json.dumps(str(data_stat))
 
                 print(data_stat)
