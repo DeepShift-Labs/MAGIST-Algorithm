@@ -1,107 +1,109 @@
-import requests, json
+import requests
+import json
 
 from ..Utils.LogMaster.log_init import MainLogger
 
 
 class ClassDeprecated(Exception):
-	pass
+    pass
 
 
 class UrbanDictionary():
-	def __init__(self, config):
-		"""Initialize the Urban Dictionary API.
-		:param config: The config file(config.json).
-		"""
+    def __init__(self, config):
+        """Initialize the Urban Dictionary API.
+        :param config: The config file(config.json).
+        """
 
-		raise ClassDeprecated("This class is deprecated")
+        raise ClassDeprecated("This class is deprecated")
 
-		root_log = MainLogger(config)
-		self.log = root_log.StandardLogger("UrbanDictionary")
+        root_log = MainLogger(config)
+        self.log = root_log.StandardLogger("UrbanDictionary")
 
-		self.url = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
+        self.url = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
 
-	def define(self, word):
-		"""Define a word.
-		:param word: The word to be defined.
-		:return: The definition of the word.
-		"""
+    def define(self, word):
+        """Define a word.
+        :param word: The word to be defined.
+        :return: The definition of the word.
+        """
 
-		querystring = {"term": word}
+        querystring = {"term": word}
 
-		headers = {
-			"X-RapidAPI-Key": "xxx",
-			"X-RapidAPI-Host": "mashape-community-urban-dictionary.p.rapidapi.com"
-		}
+        headers = {
+            "X-RapidAPI-Key": "xxx",
+            "X-RapidAPI-Host": "mashape-community-urban-dictionary.p.rapidapi.com"}
 
-		response = requests.request("GET", self.url, headers=headers, params=querystring)
+        response = requests.request(
+            "GET", self.url, headers=headers, params=querystring)
 
-		json_data = json.loads(response.text)
+        json_data = json.loads(response.text)
 
-		definition = json_data["list"][0]["definition"]
+        definition = json_data["list"][0]["definition"]
 
-		self.log.info(f"Definition of {word}: " + definition)
+        self.log.info(f"Definition of {word}: " + definition)
 
-		return definition
+        return definition
+
 
 class DicitonaryAPIDev():
-	def __init__(self, config):
-		"""Initialize the Dictionary API..
+    def __init__(self, config):
+        """Initialize the Dictionary API..
 
-		:param config: The config file(config.json).
-		"""
+        :param config: The config file(config.json).
+        """
 
-		root_log = MainLogger(config)
-		self.log = root_log.StandardLogger("DisctionaryAPI")
+        root_log = MainLogger(config)
+        self.log = root_log.StandardLogger("DisctionaryAPI")
 
-		self.url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+        self.url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
 
-	def define(self, word):
-		"""Define a word.
+    def define(self, word):
+        """Define a word.
 
-		:param word: The word to be defined.
+        :param word: The word to be defined.
 
-		:return: The definition of the word.
-		"""
+        :return: The definition of the word.
+        """
 
-		querystring = {"term": word}
+        querystring = {"term": word}
 
-		self.url = self.url + word
+        self.url = self.url + word
 
-		response = requests.request("GET", self.url, params=querystring)
+        response = requests.request("GET", self.url, params=querystring)
 
-		json_data = json.loads(response.text)
+        json_data = json.loads(response.text)
 
-		definition = json_data
-		try:
-			definition = definition[0]["meanings"][0]["definitions"][0]["definition"]
-		except KeyError:
-			definition = "No definition found"
+        definition = json_data
+        try:
+            definition = definition[0]["meanings"][0]["definitions"][0][
+                "definition"]
+        except KeyError:
+            definition = "No definition found"
 
-		self.log.info(f"Definition of {word}: " + definition)
+        self.log.info(f"Definition of {word}: " + definition)
 
-		self.url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+        self.url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
 
-		return definition
-
+        return definition
 
 
 class FullDictionarySearch():
-	def __init__(self, config):
-		"""Initialize the Dictionary API..
+    def __init__(self, config):
+        """Initialize the Dictionary API..
 
-		:param config: The config file(config.json).
-		"""
+        :param config: The config file(config.json).
+        """
 
-		root_log = MainLogger(config)
-		self.log = root_log.StandardLogger("FullDictionarySearch")
+        root_log = MainLogger(config)
+        self.log = root_log.StandardLogger("FullDictionarySearch")
 
-		self.dictdev = DicitonaryAPIDev(config)
+        self.dictdev = DicitonaryAPIDev(config)
 
-	def define(self, word):
-		definition = self.dictdev.define(word)
+    def define(self, word):
+        definition = self.dictdev.define(word)
 
-		if definition == "No definition found":
-			self.log.info("No definition found in DictionaryAPI.dev.")
-			definition = None
+        if definition == "No definition found":
+            self.log.info("No definition found in DictionaryAPI.dev.")
+            definition = None
 
-		return definition
+        return definition

@@ -5,7 +5,9 @@ MainLogger is the main class containing 1 main function that provides a unique l
 
 import logging
 import json
-import os, pathlib
+import os
+import pathlib
+
 
 class CustomFormatter(logging.Formatter):
 
@@ -31,6 +33,7 @@ class CustomFormatter(logging.Formatter):
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
 
+
 class MainLogger():
     # Logging Class
 
@@ -40,7 +43,7 @@ class MainLogger():
         :param config: A relative or absolute path to master config JSON file.
         """
         config = pathlib.Path(config)
-        config = config.resolve() # Find absolute path from a relative one.
+        config = config.resolve()  # Find absolute path from a relative one.
         f = open(config)
         config = json.load(f)
 
@@ -56,21 +59,28 @@ class MainLogger():
                 pass
 
         self.log_dir = pathlib.Path(self.log_dir)
-        self.log_dir = self.log_dir.resolve()  # Find absolute path from a relative one.
+        # Find absolute path from a relative one.
+        self.log_dir = self.log_dir.resolve()
         self.log_dir = str(self.log_dir)
 
     def StandardLogger(self, name):
         logger = logging.getLogger(name)
-        if not self.verbose: # Enable verbose depending on flag set by the config file.
+        if not self.verbose:  # Enable verbose depending on flag set by the config file.
             logger.setLevel(logging.WARNING)
         else:
             logger.setLevel(logging.DEBUG)
         # create file handler which logs even debug messages
         try:
-            fh = logging.FileHandler(os.path.join(self.log_dir, 'complete.log'))
+            fh = logging.FileHandler(
+                os.path.join(
+                    self.log_dir,
+                    'complete.log'))
         except FileNotFoundError:
             os.makedirs(self.log_dir)
-            fh = logging.FileHandler(os.path.join(self.log_dir, 'complete.log'))
+            fh = logging.FileHandler(
+                os.path.join(
+                    self.log_dir,
+                    'complete.log'))
 
         # create console handler with a higher log level
         error = logging.StreamHandler()
@@ -78,7 +88,8 @@ class MainLogger():
         error.setFormatter(CustomFormatter())
 
         # create formatter and add it to the handlers
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         fh.setFormatter(formatter)
         # error.setFormatter(formatter)
 
@@ -86,9 +97,7 @@ class MainLogger():
         logger.addHandler(fh)
         logger.addHandler(error)
 
-        logger.info(f"{name}'s LogMaster Instance Initialized Successfully ===> {os.path.join(self.log_dir, 'complete.log')}")
+        logger.info(
+            f"{name}'s LogMaster Instance Initialized Successfully ===> {os.path.join(self.log_dir, 'complete.log')}")
 
         return logger
-
-
-
