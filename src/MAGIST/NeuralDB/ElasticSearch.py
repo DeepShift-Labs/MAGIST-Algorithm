@@ -18,6 +18,7 @@ class ESDB():
 		queries_file = pathlib.Path(queries_file)
 		queries_file = queries_file.resolve()  # Find absolute path from a relative one.
 
+
 		self.schema_file = f = open(schema_file, 'r')
 		self.schema_file_data = json.load(self.schema_file)
 		self.queries_file = f = open(queries_file, 'r')
@@ -74,7 +75,8 @@ class ESDB():
 
 	#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	def add_doc(es_uri, index_name, data_type, data, update="add"):
+	def add_doc(self, index_name, data_type, data, update="add"):
+		es_uri = self.es_uri
 		data_type_valid = ['object_db_schema', 'word_db_schema']
 		if data_type not in data_type_valid:
 			raise ValueError(f"Data type {data_type} not found in available data types: {data_type_valid}")
@@ -101,8 +103,8 @@ class ESDB():
 				raise RuntimeError("Improperly formatted data. Data MUST be in the following format: {name: str, "
 				                   "description: str, users: list, related_objects: list, locations: list}")
 
-			queries_file = open('queries.json', 'r')
-			queries = json.load(queries_file)
+			# queries_file = open('queries.json', 'r')
+			queries = self.queries_file_data
 
 			queries["object_exists"]["query"]["query_string"]["query"] = name
 
@@ -182,8 +184,8 @@ class ESDB():
 				raise RuntimeError("Improperly formatted data. Data MUST be in the following format: {name: str, "
 				                   "description: str, users: list, related_objects: list, locations: list}")
 
-			queries_file = open('queries.json', 'r')
-			queries = json.load(queries_file)
+			# queries_file = open('queries.json', 'r')
+			queries = self.queries_file_data
 
 			queries["word_exists"]["query"]["query_string"]["query"] = word
 
@@ -246,3 +248,74 @@ class ESDB():
 					print(f"Error adding object {word} to index {index_name}!")
 			else:
 				print(f"Error checking if object {word} exists in index {index_name}!")
+
+	def format_object_data(self, name, description="", locations=[], related_objects=[], users=[]):
+		if type(name) is not str:
+			raise ValueError("The 'name' parameter MUST be of type String.")
+		if type(description) is not str:
+			raise ValueError("The 'description' parameter MUST be of type String.")
+		if type(locations) is not list:
+			raise ValueError("The 'locations' parameter MUST be of type List.")
+		if type(related_objects) is not list:
+			raise ValueError("The 'related_objects' parameter MUST be of type List.")
+		if type(users) is not list:
+			raise ValueError("The 'users' parameter MUST be of type List.")
+		
+
+
+		data = {
+			"name": name,
+			"description": description,
+			"locations": locations,
+			"related_objects": related_objects,
+			"users": users
+		}
+		
+		return data
+
+	def format_object_data(self, word, definition="", locations=[], related_objects=[], users=[], related_words=[]):
+		if type(word) is not str:
+			raise ValueError("The 'word' parameter MUST be of type String.")
+		if type(definition) is not str:
+			raise ValueError("The 'definition' parameter MUST be of type String.")
+		if type(locations) is not list:
+			raise ValueError("The 'locations' parameter MUST be of type List.")
+		if type(related_objects) is not list:
+			raise ValueError("The 'related_objects' parameter MUST be of type List.")
+		if type(users) is not list:
+			raise ValueError("The 'users' parameter MUST be of type List.")
+		if type(related_words) is not list:
+			raise ValueError("The 'related_words' parameter MUST be of type List.")
+
+		data = {
+			"word": word,
+			"definition": definition,
+			"locations": locations,
+			"related_objects": related_objects,
+			"related_words": related_words,
+			"users": users
+		}
+
+		return data
+
+	def search(self, index_name, index_type, keyword):
+		data_type_valid = ['object_db_schema', 'word_db_schema']
+		if index_type not in data_type_valid:
+			raise ValueError(f"Data type {index_type} not found in available data types: {data_type_valid}")
+
+		queries = self.queries_file_data
+
+		self.log.info(f"Searching for '{keyword}' in '{index_name}' index (of type '{index_type}')...")
+
+		if index_type == "object_db_schema":
+			queries["object_full"]["query"]["multi_match"]["query"] = keyword
+
+			object_full = requests.post(self.es_uri + "/" + index_name + "/_search", json=queries["object_full"])
+			object_full = json.loads(str(object_full.text))
+			return object_full
+		elif index_type == "word_db_schema":
+			queries["word_full"]["query"]["multi_match"]["query"] = keyword
+
+			word_full = requests.post(self.es_uri + "/" + index_name + "/_search", json=queries["word_full"])
+			word_full = json.loads(str(word_full.text))
+			return word_full
