@@ -178,3 +178,8 @@ testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/_mask.so
 testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/coco.pyc
 testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/cocoeval.pyc
 testing/TF_Custom_Detector/cocoapi/PythonAPI/pycocotools/mask.pyc
+
+
+# Added by cargo
+
+/target
