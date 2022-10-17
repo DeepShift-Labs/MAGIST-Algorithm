@@ -273,7 +273,7 @@ class ESDB():
 		
 		return data
 
-	def format_object_data(self, word, definition="", locations=[], related_objects=[], users=[], related_words=[]):
+	def format_word_data(self, word, definition="", locations=[], related_objects=[], users=[], related_words=[]):
 		if type(word) is not str:
 			raise ValueError("The 'word' parameter MUST be of type String.")
 		if type(definition) is not str:
@@ -319,3 +319,14 @@ class ESDB():
 			word_full = requests.post(self.es_uri + "/" + index_name + "/_search", json=queries["word_full"])
 			word_full = json.loads(str(word_full.text))
 			return word_full
+
+	def delete_all_indices(self):
+
+		indices_resp = requests.get(self.es_uri + "/_cat/indices/?format=json")
+		json_indicies = json.loads(indices_resp.text)
+		indicies = []
+		for j in json_indicies:
+			indicies.append(j["index"])
+
+		for i in indicies:
+			del_resp = requests.delete(self.es_uri + "/" + str(i))
