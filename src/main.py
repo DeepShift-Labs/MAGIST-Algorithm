@@ -2,9 +2,14 @@ from MAGIST.Vision.UnsupervisedModels.img_cluster import RoughCluster
 from MAGIST.Utils.WebScraper.google import GoogleScraper
 from MAGIST.TaskManagment.ThreadedQueue import MainPriorityQueue
 from MAGIST.Utils.WebScraper.wikipedia import WikipediaScraper
-# from MAGIST.NeuralDB.MongoUtils import AdminUtils
-# from MAGIST.NeuralDB.PrimaryNeuralDB import NeuralDB
-from MAGIST.NeuralDB.ElasticSearch import ESDB
+
+use_esdb = True
+
+if use_esdb:
+    from MAGIST.NeuralDB.ElasticSearch import ESDB
+elif not use_esdb:
+    from MAGIST.NeuralDB.MongoUtils import AdminUtils
+    from MAGIST.NeuralDB.PrimaryNeuralDB import NeuralDB
 
 import numpy as np
 import os
@@ -16,16 +21,20 @@ filenames = next(walk("inputs"), (None, None, []))[2]  # [] if no file
 cluster = RoughCluster("config/config.json")
 scraper = GoogleScraper("config/config.json")
 queue = MainPriorityQueue("config/config.json")
-# mongo_admin = AdminUtils("config/config.json")
-# client = mongo_admin.initialize_neuraldb()
-# neural_db = NeuralDB("config/config.json", client)
-wiki = WikipediaScraper("config/config.json")
-# neural_db.recreate_db()
 
-elastic = ESDB("config/config.json", "http://192.168.31.188:9200", "config/queries.json", "config/schema.json")
-elastic.delete_all_indices()
-elastic.create_index("object_db", "object_db_schema")
-elastic.create_index("word_db", "word_db_schema")
+if use_esdb:
+    elastic = ESDB("config/config.json", "http://localhost:9200", "config/queries.json", "config/schema.json")
+    elastic.delete_all_indices()
+    elastic.create_index("object_db", "object_db_schema")
+    elastic.create_index("word_db", "word_db_schema")
+elif not use_esdb:
+    mongo_admin = AdminUtils("config/config.json")
+    client = mongo_admin.initialize_neuraldb()
+    neural_db = NeuralDB("config/config.json", client)
+
+    neural_db.recreate_db()
+
+wiki = WikipediaScraper("config/config.json")
 
 for f in tqdm(filenames):
     try:
@@ -88,13 +97,17 @@ for f in tqdm(filenames):
 
         for l in labels:
             description = wiki.get_summary(l)
-            # neural_db.insert_obj_desc(l, description)
-            all_obj_data.append([l, description])
+            if use_esdb:
+                all_obj_data.append([l, description])
+            elif not use_esdb:
+                neural_db.insert_obj_desc(l, description)
 
-        for d in all_obj_data:
-            temp_data = elastic.format_object_data(str(d[0]), str(d[1]))
-            elastic.add_doc("object_db", "object_db_schema", temp_data)
-        # neural_db.remove_duplicates()
+        if use_esdb:
+            for d in all_obj_data:
+                temp_data = elastic.format_object_data(str(d[0]), str(d[1]))
+                elastic.add_doc("object_db", "object_db_schema", temp_data)
+        if not use_esdb:
+            neural_db.remove_duplicates()
         queue.join_thread()
 
     except Exception as e:
