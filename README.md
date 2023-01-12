@@ -136,7 +136,7 @@ Please consider contributing. Even minute changes to our README will be greatly 
 ### Project Zeta
 We are building a fully biomimetic robot dog to implement MAGIST into. This will serve as the gateway between MAGIST and the physical world. 
 
-[![Readme Card](https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api/pin/?username=DeepShift-Labs&theme=cobalt&repo=Project-Zeta)](https://github.com/DeepShift-Labs/Project-Zeta)
+[![Readme Card](https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api/pin/?username=DeepShift-Labs&theme=transparent&repo=Project-Zeta)](https://github.com/DeepShift-Labs/Project-Zeta)
 
 ***
 
