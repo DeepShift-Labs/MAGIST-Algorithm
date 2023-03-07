@@ -12,7 +12,6 @@ elif not use_esdb:
     from MAGIST.NeuralDB.PrimaryNeuralDB import NeuralDB
 
 import numpy as np
-import os
 from os import walk
 from tqdm import tqdm
 
