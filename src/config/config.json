@@ -1,0 +1,39 @@
+{
+  "api_authentication": [
+    {"google": [
+      {"api_key": "AIzaSyBJchpTJ0-Xq2d8dF-x_HLqcVL8x5l2DlI"},
+      {"project_cx": "47ab711e86cb1ca1b"},
+      {"GIS_downloader_verbose": 0}
+    ]}
+  ],
+  "system_administration": [
+    {"sudo_password": "Hanuman@77"}
+  ],
+  "task_management": [
+    {"num_of_worker_threads": 4}
+  ],
+  "paths": [
+    {"log_dir": "Logs"}
+  ],
+  "basic_variables": [
+    {"verbose": 1},
+    {"enable_matplot_display":  1}
+  ],
+  "tf_lite_detector": [
+    {"data_path": "Data"},
+    {"TensorBoard_log_dir": "Tensorflow/TensorBoard"},
+    {"TF_ckpt_path": "Tensorflow/tf_ckpt"},
+    {"input_image_size": [50, 50]},
+    {"grayscale": 0},
+    {"epochs": 10},
+    {"batch_size": 32},
+    {"seed": 42},
+    {"validation_split":  0.2},
+    {"export_full_model": "Tensorflow/Full_TF_Model"}
+  ],
+  "neural_db": [
+    {"elastic_socket":  "http://localhost:9200"},
+    {"mongo_socket": "mongodb://localhost:27017/"},
+    {"db_search_zone": ["vision", "nlp", "common"]}
+  ]
+}
